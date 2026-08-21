@@ -606,6 +606,7 @@ tr.hide{display:none}
 - 시작, 정지, 랩, 초기화 버튼 네 개
 - 랩을 누르면 그때 시각을 아래 목록에 쌓기
 - 1/100 초까지 표시
+- 파일은 stopwatch.html 하나만 만들 것 (CSS·JS 도 그 안에)
 만들고 나서 이 폴더에서 로컬 서버를 띄우고 주소를 알려 줘.</pre>
   </div>
 
@@ -624,9 +625,35 @@ tr.hide{display:none}
     </ul></div>
   </div>
 
+  <h3>중간에 뜨는 창 세 가지 — 전부 허락하면 됩니다</h3>
+  <div class="cards">
+    <div class="card">
+      <h4>① 폴더를 믿겠냐</h4>
+      <p style="font-family:var(--mono); font-size:12px; line-height:1.6; color:var(--ink); background:var(--sunk); padding:8px 10px; border-radius:6px; margin-bottom:8px">Do you trust the files in this folder?<br>● 1. Trust folder (stopwatch)<br>&nbsp;&nbsp;2. Trust parent folder<br>&nbsp;&nbsp;3. Don't trust</p>
+      <p><b>1번</b>을 고르고 엔터. 내가 방금 만든 폴더라 믿어도 됩니다.</p>
+    </div>
+    <div class="card">
+      <h4>② 계획대로 할까</h4>
+      <p style="font-family:var(--mono); font-size:12px; line-height:1.6; color:var(--ink); background:var(--sunk); padding:8px 10px; border-radius:6px; margin-bottom:8px">이 계획대로 진행해도 괜찮을까요?<br>Awaiting Plan Approval</p>
+      <p><b>진행해 줘</b> 라고 답하세요. 기술 스택을 물으면 <b>Single HTML/CSS/JS</b> 를 고릅니다.</p>
+    </div>
+    <div class="card">
+      <h4>③ 실행해도 되냐</h4>
+      <p style="font-family:var(--mono); font-size:12px; line-height:1.6; color:var(--ink); background:var(--sunk); padding:8px 10px; border-radius:6px; margin-bottom:8px">Action Required<br>파일을 써도 될까요?<br>● Allow / 허용<br>&nbsp;&nbsp;Deny / 거부</p>
+      <p><b>허용(Allow)</b>을 고르세요. 거부하면 파일이 안 만들어집니다.</p>
+    </div>
+  </div>
+
   <div class="tip"><p>
-    에이전트가 되물으면 편하게 답하세요. <b>“알아서 해 줘”도 답이 됩니다.</b>
+    묻는 창이 여러 번 떠도 정상입니다. <b>전부 허용</b>하면 됩니다 — 내가 만든 폴더 안에서만 움직입니다.
+    되물으면 <b>“알아서 해 줘”도 답이 됩니다.</b>
     여기가 오늘의 핵심입니다 — 한글 몇 줄 쳤는데 파일이 생겨 있습니다.
+  </p></div>
+
+  <div class="tip warn"><p>
+    프롬프트에서 <code>파일은 stopwatch.html 하나만 만들 것</code> 줄을 빼지 마세요.
+    빼면 에이전트가 <code>index.html</code>·<code>style.css</code>·<code>script.js</code> 세 개로 나눠 만들어서,
+    아래 확인 조건(<code>stopwatch.html</code> 이 생겼는지)이 안 맞습니다.
   </p></div>
 
   <ul class="checks"><li><label>
