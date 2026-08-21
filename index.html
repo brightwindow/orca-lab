@@ -548,13 +548,16 @@ tr.hide{display:none}
         Authenticated with gemini-api-key
       </p>
     </div>
-    <div class="card">
-      <h4>Codex <span style="font-weight:400;color:var(--faint);font-size:13px">OpenAI</span></h4>
+    <div class="card" style="border-color:var(--warn)">
+      <h4>Codex <span style="font-weight:400;color:var(--warn);font-size:13px">첫 실행 2~3분</span></h4>
       <p>
-        <b>1.</b> <code>codex.cmd</code> 치고 엔터<br>
-        <b>2.</b> <b>Sign in with ChatGPT</b> 고르기<br>
-        <b>3.</b> 브라우저에서 로그인하고 허용<br>
-        <b>4.</b> 터미널로 돌아오면 준비 끝
+        <b>1.</b> <code>codex.cmd</code> → <b>Sign in with ChatGPT</b> → 브라우저 로그인<br>
+        <b>2.</b> 폴더를 믿겠냐 → <b>1. Yes, continue</b><br>
+        <b>3.</b> 샌드박스 → <b>1번</b>(관리자 권한 필요). 권한이 없으면 <b>2번</b>도 됩니다<br>
+        <b>4.</b> 설치가 끝날 때까지 기다리기
+      </p>
+      <p style="margin-top:8px; font-family:var(--mono); font-size:12.5px; color:var(--warn)">
+        Setting up sandbox... (2m 20s)
       </p>
     </div>
   </div>
@@ -911,7 +914,13 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
             '<code>Read-Host</code> 로 넣으면 안 남습니다. ' +
             'API 키를 쓰면 방화벽 창도 안 뜹니다.</p>' },
     codex:  { cmd: "codex",  pkg: "@openai/codex", made: "OpenAI",
-      note: '<p>처음 실행하면 브라우저가 열리고 <b>한 번만</b> 로그인하면 됩니다.</p>' }
+      note: '<p><b>첫 실행에 2~3분 걸립니다.</b> 로그인 뒤에 “폴더를 믿겠냐”와 ' +
+          '“샌드박스 설치” 를 묻고, 설치가 끝날 때까지 입력이 잠깁니다.</p>' +
+          '<ol><li>브라우저에서 로그인 (<code>Sign in with ChatGPT</code>)</li>' +
+          '<li>폴더 신뢰 → <code>1. Yes, continue</code></li>' +
+          '<li>샌드박스 → <code>1번</code>(관리자 권한 필요). 권한이 없으면 <code>2번</code></li>' +
+          '<li><code>Setting up sandbox...</code> 가 끝날 때까지 기다리기</li></ol>' +
+          '<p>수업 전에 미리 한 번 켜 두면 이 시간을 아낄 수 있습니다.</p>' }
   };
   var tpls = document.querySelectorAll("[data-tpl]");
   Array.prototype.forEach.call(tpls, function(el){ el.dataset.orig = el.textContent; });
