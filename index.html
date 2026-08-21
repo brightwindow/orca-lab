@@ -538,13 +538,16 @@ tr.hide{display:none}
       <h4>Antigravity <span style="font-weight:400;color:var(--go);font-size:13px">권장 · API 키 없음</span></h4>
       <p>
         구글 계정으로 로그인하고 쓰던 구독 한도를 그대로 씁니다. <b>추가 비용 없음.</b><br>
-        <b>1.</b> <a href="https://antigravity.google" target="_blank" rel="noopener">antigravity.google</a> 에서 <b>2.0 이상</b> 설치<br>
+        <b>1.</b> 아래 한 줄로 설치 — <b>Node.js 도 npm 도 필요 없습니다</b><br>
         <b>2.</b> 터미널에서 <code>agy</code> 실행<br>
-        <b>3.</b> 구글 계정 로그인 (OAuth)<br>
+        <b>3.</b> 브라우저가 열리면 구글 계정으로 로그인<br>
         <b>4.</b> <code>agy</code> 가 혼자 뜨면 준비 끝
       </p>
-      <p style="margin-top:8px; font-family:var(--mono); font-size:12.5px; color:var(--muted)">
-        인증 저장: ~/.gemini/antigravity-cli/
+      <p style="margin-top:8px; font-family:var(--mono); font-size:12px; color:var(--ink); background:var(--sunk); padding:8px 10px; border-radius:6px; word-break:break-all">
+        irm https://antigravity.google/cli/install.ps1 | iex
+      </p>
+      <p style="margin-top:8px; font-size:13px; color:var(--muted)">
+        로그인 정보는 Windows 자격 증명 관리자에 저장됩니다.
       </p>
     </div>
     <div class="card" style="border-color:var(--warn)">
@@ -941,16 +944,14 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
   /* ── agent picker drives every command on the page ────────────────── */
   var AGENTS = {
     agy: { cmd: "agy", pkg: "", made: "Google · Antigravity",
-      install: "antigravity.google 에서 Antigravity 2.0 이상을 받아 설치하세요.\n설치하면 agy 명령이 같이 옵니다. (npm 으로는 설치할 수 없습니다)",
-      noinstall: "Antigravity 는 설치 프로그램으로만 됩니다. 깔 수 없는 컴퓨터라면 claude / codex / gemini 중에서 고르세요.",
+      install: "irm https://antigravity.google/cli/install.ps1 | iex",
+      noinstall: "irm https://antigravity.google/cli/install.ps1 | iex",
       note: '<p><b>API 키가 필요 없습니다.</b> 구글 계정으로 로그인하면 쓰던 구독 한도를 ' +
             '그대로 씁니다. 추가 비용도 없습니다.</p>' +
-            '<ol><li><a href="https://antigravity.google" target="_blank" rel="noopener">' +
-            'antigravity.google</a> 에서 <b>Antigravity 2.0 이상</b> 설치 ' +
-            '(<code>agy</code> 명령이 같이 옵니다)</li>' +
+            '<ol><li>아래 한 줄로 설치 (Node.js 도 npm 도 필요 없습니다)</li>' +
             '<li>터미널에서 <code>agy</code> 실행 → 구글 계정 로그인</li>' +
             '<li><code>agy</code> 가 혼자 잘 뜨면 준비 끝</li></ol>' +
-            '<p>인증은 <code>~/.gemini/antigravity-cli/</code> 에 저장됩니다. ' +
+            '<p>로그인 정보는 <b>Windows 자격 증명 관리자</b>(맥은 키체인)에 저장됩니다. ' +
             'ORCA 목록에 안 보이면 custom CLI agent 로 <code>agy</code> 를 직접 등록하면 됩니다.</p>' },
     claude: { cmd: "claude", pkg: "@anthropic-ai/claude-code", made: "Anthropic",
       install: "npm install -g @anthropic-ai/claude-code",
