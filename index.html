@@ -272,6 +272,18 @@ tr.hide{display:none}
   .screen-body{grid-template-columns:1fr}
   .screen-side{border-right:0; border-bottom:1px solid var(--soft)}
 }
+
+.deck{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-top:22px;
+      padding:14px 18px;background:var(--card);border:1px solid var(--line);border-radius:10px}
+.deck b{font-size:15px}
+.deck span.d{color:var(--muted);font-size:13.5px}
+.deck a{display:inline-block;font-family:var(--mono);font-size:13px;text-decoration:none;
+        padding:7px 14px;border-radius:7px;border:1px solid var(--line);color:var(--ink)}
+.deck a.go{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.deck a:hover{border-color:var(--go);color:var(--go)}
+.deck a.go:hover{background:var(--go);border-color:var(--go);color:#fff}
+.deck .sp{margin-left:auto}
+@media(max-width:620px){.deck .sp{margin-left:0}}
 </style>
 </head>
 <body>
@@ -303,6 +315,13 @@ tr.hide{display:none}
     프로그램을 깔고 개인 계정으로 로그인하기 때문에, 학교 공용 컴퓨터는 권하지 않습니다.
     사정상 공용 컴퓨터를 써야 한다면 <a href="#shared">맨 아래 주의사항</a>을 먼저 읽으세요.
   </p></div>
+
+  <div class="deck">
+    <b>수업 때 쓴 발표자료</b>
+    <span class="d">16장 · 설치부터 스톱워치까지</span>
+    <span class="sp"></span>
+    <a class="go" href="slides.pdf" target="_blank" rel="noopener">바로 보기</a>
+  </div>
 </div>
 
 <!-- 에이전트 선택 ─────────────────────────────────────────────────── -->
