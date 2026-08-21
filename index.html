@@ -291,6 +291,12 @@ tr.hide{display:none}
     git, 커밋, 브랜치 같은 말은 오늘 안 나옵니다. 폴더 하나로 끝냅니다.
     <b>모두 15분</b>이면 됩니다.
   </p>
+
+  <div class="tip warn" style="margin-top:24px"><p>
+    <b>준비물은 자기 노트북 한 대입니다.</b>
+    프로그램을 깔고 개인 계정으로 로그인하기 때문에, 학교 공용 컴퓨터는 권하지 않습니다.
+    사정상 공용 컴퓨터를 써야 한다면 <a href="#shared">맨 아래 주의사항</a>을 먼저 읽으세요.
+  </p></div>
 </div>
 
 <!-- 에이전트 선택 ─────────────────────────────────────────────────── -->
@@ -306,6 +312,8 @@ tr.hide{display:none}
     <div class="tip warn" style="margin-top:15px"><p>
       OpenAI 것은 이름이 <b>GPT 가 아니라 Codex</b> 입니다. 제일 많이 헷갈리는 부분입니다.
     </p></div>
+
+    <div id="agent-note" hidden></div>
   </div>
 </section>
 
@@ -509,6 +517,67 @@ tr.hide{display:none}
     관리자 권한 없이 됩니다. <code>Y</code> 를 누르면 끝이고, 이후로는 <code data-tpl="{CMD}">이름</code> 만 쳐도 열립니다.
   </p>
 
+  <h3>처음 한 번은 로그인을 합니다</h3>
+  <p class="sub" style="margin-bottom:14px">고른 것에 맞춰 아래대로 하세요. 한 번만 하면 됩니다.</p>
+
+  <div class="cards">
+    <div class="card">
+      <h4>Claude <span style="font-weight:400;color:var(--faint);font-size:13px">Anthropic</span></h4>
+      <p>
+        <b>1.</b> <code>claude.cmd</code> 치고 엔터<br>
+        <b>2.</b> 브라우저가 저절로 열립니다. 안 열리면 터미널에 찍힌 주소를 복사해 붙이세요<br>
+        <b>3.</b> 로그인하고 <b>Authorize</b> 누르기<br>
+        <b>4.</b> 터미널로 돌아오면 프롬프트가 떠 있습니다
+      </p>
+    </div>
+    <div class="card" style="border-color:var(--warn)">
+      <h4>Gemini <span style="font-weight:400;color:var(--warn);font-size:13px">API 키 필요</span></h4>
+      <p>
+        구글 계정 로그인은 <b>막혔습니다.</b><br>
+        <b>1.</b> <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> 에서 키 만들기 (무료)<br>
+        <b>2.</b> 아래 명령으로 키 넣기<br>
+        <b>3.</b> <code>gemini.cmd</code> 실행 후 <b>2. Use Gemini API Key</b> 고르기
+      </p>
+    </div>
+    <div class="card">
+      <h4>Codex <span style="font-weight:400;color:var(--faint);font-size:13px">OpenAI</span></h4>
+      <p>
+        <b>1.</b> <code>codex.cmd</code> 치고 엔터<br>
+        <b>2.</b> <b>Sign in with ChatGPT</b> 고르기<br>
+        <b>3.</b> 브라우저에서 로그인하고 허용<br>
+        <b>4.</b> 터미널로 돌아오면 준비 끝
+      </p>
+    </div>
+  </div>
+
+  <div class="snip">
+    <div class="snip-top"><span>Gemini 를 고른 사람만</span><button class="copy">복사</button></div>
+<pre>$env:GEMINI_API_KEY = Read-Host "API 키 붙여넣기"</pre>
+  </div>
+
+  <h3>이런 글자가 나와도 잘못한 게 아닙니다</h3>
+  <div class="pair">
+    <div class="box no">
+      <h4>Gemini 에서</h4>
+      <p style="font-family:var(--mono); font-size:12.5px; line-height:1.6; margin:0 0 8px; color:var(--warn)">
+        This client is no longer supported for Gemini Code Assist for individuals.
+      </p>
+      <p style="margin:0; font-size:14.5px">구글이 개인용 로그인을 닫았습니다. 위의 <b>API 키</b>로 가면 됩니다.</p>
+    </div>
+    <div class="box no">
+      <h4>이름만 쳤을 때 (Windows)</h4>
+      <p style="font-family:var(--mono); font-size:12.5px; line-height:1.6; margin:0 0 8px; color:var(--warn)">
+        이 시스템에서 스크립트를 실행할 수 없으므로 gemini.ps1 파일을 로드할 수 없습니다
+      </p>
+      <p style="margin:0; font-size:14.5px">이름 뒤에 <code>.cmd</code> 를 붙여 치면 됩니다.</p>
+    </div>
+  </div>
+
+  <div class="tip"><p>
+    방화벽이 <b>Node.js</b> 를 물어보면 <b>취소해도 됩니다.</b>
+    로그인 창을 받으려고 잠깐 여는 것이고, 내 컴퓨터 안 통신이라 막히지 않습니다.
+  </p></div>
+
   <ul class="checks"><li><label>
     <input type="checkbox"><span>프롬프트가 떴고 입력을 기다리고 있다</span>
   </label></li></ul>
@@ -595,6 +664,119 @@ tr.hide{display:none}
   </label></li></ul>
 </section>
 
+<!-- 공용 컴퓨터 ───────────────────────────────────────────────────── -->
+<section id="shared">
+  <div class="step-head">
+    <span class="badge plain">중요</span><h2>학교 공용 컴퓨터에서 할 때</h2>
+  </div>
+  <div class="tip warn"><p>
+    <b>먼저 전산실 담당자에게 허락을 받으세요.</b> 이 실습은 컴퓨터에 프로그램을 깝니다
+    (<code>npm install -g</code>). 대부분의 전산실이 무단 설치를 규정으로 막고 있습니다.
+    허락이 안 되면 아래 “설치가 막힐 때”의 방법을 쓰거나, 개인 노트북으로 하세요.
+  </p></div>
+
+  <p class="sub" style="margin-top:20px">
+    실습 자체는 똑같습니다. 다만 <b>내 계정 흔적이 컴퓨터에 남습니다.</b>
+    그대로 두고 나가면 다음에 쓰는 사람이 내 계정으로 요금을 쓰게 됩니다.
+    아래 네 가지를 지키세요.
+  </p>
+
+  <ol class="do">
+    <li><b>API 키를 명령줄에 직접 치지 마세요</b>
+      <span class="why">PowerShell 은 친 명령을 전부
+      <code>ConsoleHost_history.txt</code> 에 자동 저장합니다.
+      <code>$env:KEY = "실제키"</code> 라고 치면 <b>키가 그 파일에 평문으로 남습니다.</b>
+      아래 <code>Read-Host</code> 방식을 쓰면 키는 안 남습니다</span></li>
+    <li><b>보안 설정은 바꾸지 마세요</b>
+      <span class="why"><code>Set-ExecutionPolicy</code> 는 공용 PC 에서 쓰지 마세요.
+      이름 뒤에 <code>.cmd</code> 를 붙이면 설정을 안 바꾸고도 됩니다</span></li>
+    <li><b>로그인 창은 시크릿 모드로</b>
+      <span class="why">브라우저에 구글·OpenAI 계정이 그대로 남습니다.
+      주소를 복사해 시크릿 창에 붙여 넣으세요</span></li>
+    <li><b>끝나면 반드시 로그아웃</b>
+      <span class="why">아래 표대로 하고, 마지막에 정리 명령까지 돌리세요</span></li>
+  </ol>
+
+  <div class="snip big">
+    <div class="snip-top"><span>API 키를 안전하게 넣는 법</span><button class="copy">복사</button></div>
+<pre>$env:GEMINI_API_KEY = Read-Host "API 키 붙여넣기"</pre>
+  </div>
+  <p style="font-size:15px; color:var(--muted); margin-top:-6px">
+    기록 파일에는 이 명령만 남고 <b>키는 남지 않습니다.</b> 창을 닫으면 키도 사라집니다.
+  </p>
+
+  <h3>에이전트별 로그인과 로그아웃</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>에이전트</th><th>로그인</th><th>끝나고 로그아웃</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="k">Claude</td>
+          <td>처음 실행하면 브라우저가 열립니다. 한 번만</td>
+          <td><code>claude auth logout</code></td>
+        </tr>
+        <tr>
+          <td class="k">Gemini</td>
+          <td>구글 로그인은 막혔습니다. <b>API 키</b>를 쓰세요<br>
+            <code>$env:GEMINI_API_KEY = Read-Host "키"</code></td>
+          <td>창을 닫으면 키는 사라집니다.<br>전에 로그인한 적 있으면 아래 정리 명령으로</td>
+        </tr>
+        <tr>
+          <td class="k">Codex</td>
+          <td>처음 실행하면 브라우저가 열립니다. 한 번만</td>
+          <td><code>codex logout</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>마지막에 이것만 돌리고 나가세요</h3>
+  <p class="sub" style="margin-bottom:12px">
+    로그아웃 명령이 안 먹거나 확실히 하고 싶을 때 씁니다. 자격증명 폴더를 통째로 지웁니다.
+  </p>
+  <div class="snip big">
+    <div class="snip-top"><span>PowerShell · 실습 끝나고</span><button class="copy">전체 복사</button></div>
+<pre># 1) 로그아웃 (설치되어 있는 것만 실행됨)
+claude.cmd auth logout
+codex.cmd logout
+
+# 2) 남은 자격증명 폴더 지우기
+Remove-Item -Recurse -Force "$env:USERPROFILE\.gemini",
+  "$env:USERPROFILE\.codex", "$env:USERPROFILE\.claude",
+  "$env:USERPROFILE\.claude.json" -ErrorAction SilentlyContinue
+
+# 3) 영구 저장된 키가 있으면 제거
+[Environment]::SetEnvironmentVariable("GEMINI_API_KEY", $null, "User")
+
+# 4) 명령 기록 비우기 (키를 직접 쳤을 경우 대비)
+Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContinue</pre>
+  </div>
+
+  <p style="font-size:15px; color:var(--muted); margin-top:-6px">
+    내가 만든 <code>stopwatch</code> 폴더는 여기서 지우지 않습니다.
+    가져갈 파일을 먼저 챙기고, 탐색기에서 직접 지우세요.
+  </p>
+
+  <div class="tip warn"><p>
+    <b>본인 노트북에서는 2번 이후를 돌리지 마세요.</b> 쓰던 로그인이 전부 지워집니다.
+    공용 컴퓨터에서 자리를 뜰 때만 쓰는 명령입니다.
+  </p></div>
+
+  <h3>설치가 막힐 때</h3>
+  <p>
+    공용 컴퓨터는 <code>npm install -g</code> 가 권한 때문에 막히기도 합니다.
+    그럴 때는 <b>깔지 않고 바로 실행</b>하면 됩니다.
+  </p>
+  <div class="snip">
+    <div class="snip-top"><span>설치 없이 한 번만 실행</span><button class="copy">복사</button></div>
+<pre data-tpl="npx -y {PKG}">위에서 에이전트를 고르면 여기에 나옵니다.</pre>
+  </div>
+
+  <ul class="checks"><li><label>
+    <input type="checkbox"><span>실습이 끝나면 로그아웃하고 정리 명령을 돌렸다</span>
+  </label></li></ul>
+</section>
+
 <!-- 트러블슈팅 ────────────────────────────────────────────────────── -->
 <section id="trouble">
   <div class="step-head">
@@ -609,7 +791,9 @@ tr.hide{display:none}
       <tbody id="tb">
         <tr><td class="k">없는 명령이라고 나옴</td><td>아직 안 깔린 것입니다. 실습 2 로 돌아가서 깔고 오세요</td></tr>
         <tr><td class="k">보안 오류 · 스크립트를 실행할 수 없음</td><td>Windows 기본 설정 탓입니다. 이름 뒤에 <code>.cmd</code> 를 붙여 치거나, <code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> 를 한 번 실행하세요</td></tr>
-        <tr><td class="k">로그인하라고 함</td><td>나오는 대로 한 번만 따라가면 다음부터는 안 묻습니다</td></tr>
+        <tr><td class="k">로그인하라고 함</td><td>한 번만 따라가면 다음부터는 안 묻습니다</td></tr>
+        <tr><td class="k">Gemini 로그인이 안 됨<br><span style="font-weight:400; color:var(--faint); font-size:13px">no longer supported for individuals</span></td><td>구글이 개인용 로그인을 닫았습니다. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> 에서 키를 받아 <code>setx GEMINI_API_KEY "키"</code> 후 터미널을 새로 여세요</td></tr>
+        <tr><td class="k">방화벽이 Node.js 를 물어봄<br><span style="font-weight:400; color:var(--faint); font-size:13px">개인/공용 네트워크</span></td><td>로그인 창을 받으려고 잠깐 여는 것입니다. <b>취소해도 됩니다</b> — 방화벽은 내 컴퓨터 안 통신(127.0.0.1)은 막지 않습니다</td></tr>
         <tr><td class="k">터미널 경로가 딴 데임</td><td>왼쪽 목록에서 <code>stopwatch</code> 를 다시 누르세요</td></tr>
         <tr><td class="k">주소가 안 열림</td><td>터미널에 서버가 켜져 있는지 보고, 포트 번호를 다시 확인하세요</td></tr>
         <tr><td class="k">에러 글자가 잔뜩 나옴</td><td>그대로 복사해서 <b>“이 에러 고쳐 줘”</b> 라고 붙여 넣으세요</td></tr>
@@ -673,9 +857,23 @@ tr.hide{display:none}
 
   /* ── agent picker drives every command on the page ────────────────── */
   var AGENTS = {
-    claude: { cmd: "claude", pkg: "@anthropic-ai/claude-code", made: "Anthropic" },
-    gemini: { cmd: "gemini", pkg: "@google/gemini-cli",        made: "Google" },
-    codex:  { cmd: "codex",  pkg: "@openai/codex",             made: "OpenAI" }
+    claude: { cmd: "claude", pkg: "@anthropic-ai/claude-code", made: "Anthropic",
+      note: '<p>처음 실행하면 브라우저가 열리고 <b>한 번만</b> 로그인하면 됩니다.</p>' },
+    gemini: { cmd: "gemini", pkg: "@google/gemini-cli", made: "Google",
+      note: '<p><b>구글 계정 로그인은 막혔습니다.</b> ' +
+            '“This client is no longer supported for Gemini Code Assist for individuals” ' +
+            '라고 나오는데, 잘못 깐 게 아니라 구글이 개인 사용자 경로를 닫은 것입니다. ' +
+            '<b>API 키</b>로 쓰세요.</p>' +
+            '<ol><li><a href="https://aistudio.google.com/apikey" target="_blank" ' +
+            'rel="noopener">aistudio.google.com/apikey</a> 에서 키 만들기 (무료)</li>' +
+            '<li>터미널에 <code>$env:GEMINI_API_KEY = "받은키"</code> 입력' +
+            ' <b>(공용 컴퓨터면 반드시 이 방식)</b></li>' +
+            '<li>이어서 실행. 메뉴가 뜨면 <code>2. Use Gemini API Key</code> 고르기</li></ol>' +
+            '<p>API 키를 쓰면 방화벽 창도 안 뜹니다. ' +
+            '내 노트북이라 매번 치기 귀찮으면 <code>setx GEMINI_API_KEY "키"</code> 로 ' +
+            '한 번만 저장하고 터미널을 새로 여세요.</p>' },
+    codex:  { cmd: "codex",  pkg: "@openai/codex", made: "OpenAI",
+      note: '<p>처음 실행하면 브라우저가 열리고 <b>한 번만</b> 로그인하면 됩니다.</p>' }
   };
   var tpls = document.querySelectorAll("[data-tpl]");
   Array.prototype.forEach.call(tpls, function(el){ el.dataset.orig = el.textContent; });
@@ -693,6 +891,10 @@ tr.hide{display:none}
     Array.prototype.forEach.call(document.querySelectorAll("[data-agent-label]"), function(el){
       el.textContent = a ? "terminal · " + a.made : "에이전트를 먼저 고르세요";
     });
+    var note = document.getElementById("agent-note");
+    note.innerHTML = a ? a.note : "";
+    note.hidden = !a;
+    note.className = (key === "gemini") ? "tip warn" : "tip";
   }
   document.getElementById("opts").addEventListener("click", function(e){
     var b = e.target.closest("button[data-a]");
