@@ -177,7 +177,7 @@ ol.do .why{grid-column:2; display:block; color:var(--muted);
   padding:18px 20px; box-shadow:var(--shadow)}
 .picker h3{margin:0 0 4px; font-size:17px}
 .picker p{margin:0 0 14px; font-size:15px; color:var(--muted); max-width:none}
-.opts{display:grid; grid-template-columns:repeat(3,1fr); gap:10px}
+.opts{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px}
 .opts button{
   font:inherit; font-family:var(--mono); font-size:14px; font-weight:600;
   padding:13px 8px; border:1.5px solid var(--line); border-radius:9px;
@@ -309,16 +309,18 @@ tr.hide{display:none}
 <section id="pick" style="border-top:0; padding-top:0">
   <div class="picker">
     <h3>먼저, 쓸 에이전트 하나만 고르세요</h3>
-    <p>셋 다 결과는 비슷합니다. 하나 고르면 <b>아래 모든 명령어가 그걸로 바뀝니다.</b></p>
+    <p>어느 걸 골라도 오늘 결과는 비슷합니다. 하나 고르면 <b>아래 모든 명령어가 그걸로 바뀝니다.</b></p>
     <div class="opts" id="opts">
+      <button data-a="agy"    aria-pressed="false">agy<small>Antigravity · 권장</small></button>
       <button data-a="claude" aria-pressed="false">claude<small>Pro/Max 구독 필요</small></button>
-      <button data-a="gemini" aria-pressed="false">gemini<small>API 키 · 무료</small></button>
       <button data-a="codex"  aria-pressed="false">codex<small>첫 실행 2~3분</small></button>
+      <button data-a="gemini" aria-pressed="false">gemini<small>API 키 필요</small></button>
     </div>
     <div class="tip" style="margin-top:14px"><p>
-      셋 다 계정이 필요하고 <b>조건이 서로 다릅니다.</b>
-      구독이 없거나 확실하게 가고 싶으면 <b>gemini</b> 를 고르세요 — API 키가 무료로 발급되고
-      구독이 필요 없습니다.
+      ORCA 는 에이전트를 직접 만들지 않고 <b>터미널에서 도는 CLI 를 대신 띄워 줍니다.</b>
+      그래서 <b>ORCA 밖에서 먼저 깔고 로그인</b>해 두는 것이 순서입니다.
+      넷 다 계정이 필요하고 조건이 다른데, <b>Antigravity(<code>agy</code>)</b> 가 제일 간단합니다 —
+      구글 계정으로 로그인하고 <b>API 키가 필요 없습니다.</b>
     </p></div>
     <div class="tip warn" style="margin-top:15px"><p>
       OpenAI 것은 이름이 <b>GPT 가 아니라 Codex</b> 입니다. 제일 많이 헷갈리는 부분입니다.
@@ -378,7 +380,7 @@ tr.hide{display:none}
   <h3>고른 에이전트 깔기</h3>
   <div class="snip">
     <div class="snip-top"><span data-agent-label>에이전트를 먼저 고르세요</span><button class="copy">복사</button></div>
-<pre data-tpl="npm install -g {PKG}">위에서 에이전트를 고르면 여기에 명령어가 나옵니다.</pre>
+<pre data-tpl="{INSTALL}">위에서 에이전트를 고르면 여기에 명령어가 나옵니다.</pre>
   </div>
 
   <div class="pair">
@@ -532,6 +534,19 @@ tr.hide{display:none}
   <p class="sub" style="margin-bottom:14px">고른 것에 맞춰 아래대로 하세요. 한 번만 하면 됩니다.</p>
 
   <div class="cards">
+    <div class="card" style="border-color:var(--go)">
+      <h4>Antigravity <span style="font-weight:400;color:var(--go);font-size:13px">권장 · API 키 없음</span></h4>
+      <p>
+        구글 계정으로 로그인하고 쓰던 구독 한도를 그대로 씁니다. <b>추가 비용 없음.</b><br>
+        <b>1.</b> <a href="https://antigravity.google" target="_blank" rel="noopener">antigravity.google</a> 에서 <b>2.0 이상</b> 설치<br>
+        <b>2.</b> 터미널에서 <code>agy</code> 실행<br>
+        <b>3.</b> 구글 계정 로그인 (OAuth)<br>
+        <b>4.</b> <code>agy</code> 가 혼자 뜨면 준비 끝
+      </p>
+      <p style="margin-top:8px; font-family:var(--mono); font-size:12.5px; color:var(--muted)">
+        인증 저장: ~/.gemini/antigravity-cli/
+      </p>
+    </div>
     <div class="card" style="border-color:var(--warn)">
       <h4>Claude <span style="font-weight:400;color:var(--warn);font-size:13px">유료 구독 필요</span></h4>
       <p>
@@ -837,7 +852,7 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
   </p>
   <div class="snip">
     <div class="snip-top"><span>설치 없이 한 번만 실행</span><button class="copy">복사</button></div>
-<pre data-tpl="npx -y {PKG}">위에서 에이전트를 고르면 여기에 나옵니다.</pre>
+<pre data-tpl="{NOINSTALL}">위에서 에이전트를 고르면 여기에 나옵니다.</pre>
   </div>
 
   <ul class="checks"><li><label>
@@ -925,7 +940,21 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
 
   /* ── agent picker drives every command on the page ────────────────── */
   var AGENTS = {
+    agy: { cmd: "agy", pkg: "", made: "Google · Antigravity",
+      install: "antigravity.google 에서 Antigravity 2.0 이상을 받아 설치하세요.\n설치하면 agy 명령이 같이 옵니다. (npm 으로는 설치할 수 없습니다)",
+      noinstall: "Antigravity 는 설치 프로그램으로만 됩니다. 깔 수 없는 컴퓨터라면 claude / codex / gemini 중에서 고르세요.",
+      note: '<p><b>API 키가 필요 없습니다.</b> 구글 계정으로 로그인하면 쓰던 구독 한도를 ' +
+            '그대로 씁니다. 추가 비용도 없습니다.</p>' +
+            '<ol><li><a href="https://antigravity.google" target="_blank" rel="noopener">' +
+            'antigravity.google</a> 에서 <b>Antigravity 2.0 이상</b> 설치 ' +
+            '(<code>agy</code> 명령이 같이 옵니다)</li>' +
+            '<li>터미널에서 <code>agy</code> 실행 → 구글 계정 로그인</li>' +
+            '<li><code>agy</code> 가 혼자 잘 뜨면 준비 끝</li></ol>' +
+            '<p>인증은 <code>~/.gemini/antigravity-cli/</code> 에 저장됩니다. ' +
+            'ORCA 목록에 안 보이면 custom CLI agent 로 <code>agy</code> 를 직접 등록하면 됩니다.</p>' },
     claude: { cmd: "claude", pkg: "@anthropic-ai/claude-code", made: "Anthropic",
+      install: "npm install -g @anthropic-ai/claude-code",
+      noinstall: "npx -y @anthropic-ai/claude-code",
       note: '<p><b>Pro / Max 구독이나 API 과금 계정이 있어야 합니다.</b> ' +
             '무료 계정으로는 쓸 수 없습니다.</p>' +
             '<ol><li>글자 스타일 고르기 → 보통 <code>2. Dark mode</code></li>' +
@@ -934,6 +963,8 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
             '<li>안내 두 개는 엔터로 넘기기</li></ol>' +
             '<p>구독이 없으면 <b>Gemini 의 API 키</b>로 가세요. 무료입니다.</p>' },
     gemini: { cmd: "gemini", pkg: "@google/gemini-cli", made: "Google",
+      install: "npm install -g @google/gemini-cli",
+      noinstall: "npx -y @google/gemini-cli",
       note: '<p><b>구글 계정 로그인은 막혔습니다.</b> ' +
             '“This client is no longer supported for Gemini Code Assist for individuals” ' +
             '라고 나오는데, 잘못 깐 게 아니라 구글이 개인 사용자 경로를 닫은 것입니다. ' +
@@ -949,6 +980,8 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
             '<code>Read-Host</code> 로 넣으면 안 남습니다. ' +
             'API 키를 쓰면 방화벽 창도 안 뜹니다.</p>' },
     codex:  { cmd: "codex",  pkg: "@openai/codex", made: "OpenAI",
+      install: "npm install -g @openai/codex",
+      noinstall: "npx -y @openai/codex",
       note: '<p><b>첫 실행에 2~3분 걸립니다.</b> 로그인 뒤에 “폴더를 믿겠냐”와 ' +
           '“샌드박스 설치” 를 묻고, 설치가 끝날 때까지 입력이 잠깁니다.</p>' +
           '<ol><li>브라우저에서 로그인 (<code>Sign in with ChatGPT</code>)</li>' +
@@ -967,7 +1000,11 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
     });
     Array.prototype.forEach.call(tpls, function(el){
       el.textContent = a
-        ? el.dataset.tpl.replace(/\{CMD\}/g, a.cmd).replace(/\{PKG\}/g, a.pkg)
+        ? el.dataset.tpl
+            .replace(/\{CMD\}/g, a.cmd)
+            .replace(/\{PKG\}/g, a.pkg)
+            .replace(/\{INSTALL\}/g, a.install)
+            .replace(/\{NOINSTALL\}/g, a.noinstall)
         : el.dataset.orig;
     });
     Array.prototype.forEach.call(document.querySelectorAll("[data-agent-label]"), function(el){
