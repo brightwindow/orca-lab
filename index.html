@@ -483,9 +483,31 @@ tr.hide{display:none}
     </ul></div>
     <div class="box no"><h4>막히면</h4><ul>
       <li><b>없는 명령</b>이라고 하면 실습 2 를 안 한 것입니다</li>
-      <li>돌아가서 깔고 오세요</li>
+      <li><b>보안 오류</b>가 나면 바로 아래를 보세요</li>
     </ul></div>
   </div>
+
+  <h3>Windows 에서 “이 시스템에서 스크립트를 실행할 수 없으므로”</h3>
+  <p class="sub" style="margin-bottom:12px">
+    깔기는 됐는데 이름을 치면 빨간 글씨가 쏟아지는 경우입니다.
+    PowerShell 이 <b>기본적으로 스크립트 실행을 막아 둔</b> 탓이고, 잘못 깐 게 아닙니다.
+  </p>
+
+  <div class="snip">
+    <div class="snip-top"><span>방법 1 · 지금 바로 · 설정 안 바꿈</span><button class="copy">복사</button></div>
+<pre data-tpl="{CMD}.cmd">위에서 에이전트를 고르면 여기에 나옵니다.</pre>
+  </div>
+  <p style="font-size:15px; color:var(--muted); margin-top:-6px">
+    이름 뒤에 <code>.cmd</code> 만 붙이면 됩니다. 오늘 실습은 이걸로 충분합니다.
+  </p>
+
+  <div class="snip">
+    <div class="snip-top"><span>방법 2 · 한 번만 하면 계속 됨</span><button class="copy">복사</button></div>
+<pre>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</pre>
+  </div>
+  <p style="font-size:15px; color:var(--muted); margin-top:-6px">
+    관리자 권한 없이 됩니다. <code>Y</code> 를 누르면 끝이고, 이후로는 <code data-tpl="{CMD}">이름</code> 만 쳐도 열립니다.
+  </p>
 
   <ul class="checks"><li><label>
     <input type="checkbox"><span>프롬프트가 떴고 입력을 기다리고 있다</span>
@@ -586,6 +608,7 @@ tr.hide{display:none}
       <thead><tr><th>이럴 때</th><th>이렇게 해 보기</th></tr></thead>
       <tbody id="tb">
         <tr><td class="k">없는 명령이라고 나옴</td><td>아직 안 깔린 것입니다. 실습 2 로 돌아가서 깔고 오세요</td></tr>
+        <tr><td class="k">보안 오류 · 스크립트를 실행할 수 없음</td><td>Windows 기본 설정 탓입니다. 이름 뒤에 <code>.cmd</code> 를 붙여 치거나, <code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> 를 한 번 실행하세요</td></tr>
         <tr><td class="k">로그인하라고 함</td><td>나오는 대로 한 번만 따라가면 다음부터는 안 묻습니다</td></tr>
         <tr><td class="k">터미널 경로가 딴 데임</td><td>왼쪽 목록에서 <code>stopwatch</code> 를 다시 누르세요</td></tr>
         <tr><td class="k">주소가 안 열림</td><td>터미널에 서버가 켜져 있는지 보고, 포트 번호를 다시 확인하세요</td></tr>
