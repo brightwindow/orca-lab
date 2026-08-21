@@ -311,10 +311,15 @@ tr.hide{display:none}
     <h3>먼저, 쓸 에이전트 하나만 고르세요</h3>
     <p>셋 다 결과는 비슷합니다. 하나 고르면 <b>아래 모든 명령어가 그걸로 바뀝니다.</b></p>
     <div class="opts" id="opts">
-      <button data-a="claude" aria-pressed="false">claude<small>Anthropic</small></button>
-      <button data-a="gemini" aria-pressed="false">gemini<small>Google</small></button>
-      <button data-a="codex"  aria-pressed="false">codex<small>OpenAI</small></button>
+      <button data-a="claude" aria-pressed="false">claude<small>Pro/Max 구독 필요</small></button>
+      <button data-a="gemini" aria-pressed="false">gemini<small>API 키 · 무료</small></button>
+      <button data-a="codex"  aria-pressed="false">codex<small>첫 실행 2~3분</small></button>
     </div>
+    <div class="tip" style="margin-top:14px"><p>
+      셋 다 계정이 필요하고 <b>조건이 서로 다릅니다.</b>
+      구독이 없거나 확실하게 가고 싶으면 <b>gemini</b> 를 고르세요 — API 키가 무료로 발급되고
+      구독이 필요 없습니다.
+    </p></div>
     <div class="tip warn" style="margin-top:15px"><p>
       OpenAI 것은 이름이 <b>GPT 가 아니라 Codex</b> 입니다. 제일 많이 헷갈리는 부분입니다.
     </p></div>
@@ -527,13 +532,17 @@ tr.hide{display:none}
   <p class="sub" style="margin-bottom:14px">고른 것에 맞춰 아래대로 하세요. 한 번만 하면 됩니다.</p>
 
   <div class="cards">
-    <div class="card">
-      <h4>Claude <span style="font-weight:400;color:var(--faint);font-size:13px">Anthropic</span></h4>
+    <div class="card" style="border-color:var(--warn)">
+      <h4>Claude <span style="font-weight:400;color:var(--warn);font-size:13px">유료 구독 필요</span></h4>
       <p>
+        <b>Pro / Max</b> 구독이나 API 과금 계정이 있어야 합니다.<br>
         <b>1.</b> <code>claude.cmd</code> 치고 엔터<br>
-        <b>2.</b> 브라우저가 저절로 열립니다. 안 열리면 터미널에 찍힌 주소를 복사해 붙이세요<br>
-        <b>3.</b> 로그인하고 <b>Authorize</b> 누르기<br>
-        <b>4.</b> 터미널로 돌아오면 프롬프트가 떠 있습니다
+        <b>2.</b> 글자 스타일 고르기 → 보통 <b>2. Dark mode</b><br>
+        <b>3.</b> 로그인 방식 → <b>1. Claude account with subscription</b><br>
+        <b>4.</b> 브라우저 로그인 → 안내 2개는 엔터로 넘기기
+      </p>
+      <p style="margin-top:8px; font-family:var(--mono); font-size:12.5px; color:var(--go)">
+        Login successful. Press Enter…
       </p>
     </div>
     <div class="card" style="border-color:var(--warn)">
@@ -897,7 +906,13 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
   /* ── agent picker drives every command on the page ────────────────── */
   var AGENTS = {
     claude: { cmd: "claude", pkg: "@anthropic-ai/claude-code", made: "Anthropic",
-      note: '<p>처음 실행하면 브라우저가 열리고 <b>한 번만</b> 로그인하면 됩니다.</p>' },
+      note: '<p><b>Pro / Max 구독이나 API 과금 계정이 있어야 합니다.</b> ' +
+            '무료 계정으로는 쓸 수 없습니다.</p>' +
+            '<ol><li>글자 스타일 고르기 → 보통 <code>2. Dark mode</code></li>' +
+            '<li>로그인 방식 → <code>1. Claude account with subscription</code></li>' +
+            '<li>브라우저에서 로그인 → <code>Login successful</code></li>' +
+            '<li>안내 두 개는 엔터로 넘기기</li></ol>' +
+            '<p>구독이 없으면 <b>Gemini 의 API 키</b>로 가세요. 무료입니다.</p>' },
     gemini: { cmd: "gemini", pkg: "@google/gemini-cli", made: "Google",
       note: '<p><b>구글 계정 로그인은 막혔습니다.</b> ' +
             '“This client is no longer supported for Gemini Code Assist for individuals” ' +
