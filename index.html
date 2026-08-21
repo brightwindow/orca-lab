@@ -539,8 +539,8 @@ tr.hide{display:none}
       <p>
         구글 계정으로 로그인하고 쓰던 구독 한도를 그대로 씁니다. <b>추가 비용 없음.</b><br>
         <b>1.</b> 아래 한 줄로 설치 — <b>Node.js 도 npm 도 필요 없습니다</b><br>
-        <b>2.</b> 터미널에서 <code>agy</code> 실행<br>
-        <b>3.</b> 브라우저가 열리면 구글 계정으로 로그인<br>
+        <b>2.</b> <b>터미널을 닫았다가 새로 열기</b> (안 그러면 <code>agy</code> 를 못 찾습니다)<br>
+        <b>3.</b> <code>agy</code> 실행 → 브라우저에서 구글 계정 로그인<br>
         <b>4.</b> <code>agy</code> 가 혼자 뜨면 준비 끝
       </p>
       <p style="margin-top:8px; font-family:var(--mono); font-size:12px; color:var(--ink); background:var(--sunk); padding:8px 10px; border-radius:6px; word-break:break-all">
@@ -876,6 +876,7 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
       <thead><tr><th>이럴 때</th><th>이렇게 해 보기</th></tr></thead>
       <tbody id="tb">
         <tr><td class="k">없는 명령이라고 나옴</td><td>아직 안 깔린 것입니다. 실습 2 로 돌아가서 깔고 오세요</td></tr>
+        <tr><td class="k">agy 를 깔았는데 없는 명령이라고 함</td><td><b>터미널을 닫았다가 새로 여세요.</b> 설치 프로그램이 PATH 에 넣어 주지만 이미 열려 있던 터미널에는 적용되지 않습니다</td></tr>
         <tr><td class="k">보안 오류 · 스크립트를 실행할 수 없음</td><td>Windows 기본 설정 탓입니다. 이름 뒤에 <code>.cmd</code> 를 붙여 치거나, <code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> 를 한 번 실행하세요</td></tr>
         <tr><td class="k">로그인하라고 함</td><td>한 번만 따라가면 다음부터는 안 묻습니다</td></tr>
         <tr><td class="k">Gemini 로그인이 안 됨<br><span style="font-weight:400; color:var(--faint); font-size:13px">no longer supported for individuals</span></td><td>구글이 개인용 로그인을 닫았습니다. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> 에서 키를 받아 <code>$env:GEMINI_API_KEY = Read-Host "키"</code> 로 넣고 다시 실행하세요</td></tr>
@@ -949,7 +950,8 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
       note: '<p><b>API 키가 필요 없습니다.</b> 구글 계정으로 로그인하면 쓰던 구독 한도를 ' +
             '그대로 씁니다. 추가 비용도 없습니다.</p>' +
             '<ol><li>아래 한 줄로 설치 (Node.js 도 npm 도 필요 없습니다)</li>' +
-            '<li>터미널에서 <code>agy</code> 실행 → 구글 계정 로그인</li>' +
+            '<li><b>터미널을 닫았다가 새로 여세요.</b> 설치 직후에는 <code>agy</code> 가 안 잡힙니다</li>' +
+            '<li><code>agy</code> 실행 → 브라우저가 열리면 구글 계정으로 로그인</li>' +
             '<li><code>agy</code> 가 혼자 잘 뜨면 준비 끝</li></ol>' +
             '<p>로그인 정보는 <b>Windows 자격 증명 관리자</b>(맥은 키체인)에 저장됩니다. ' +
             'ORCA 목록에 안 보이면 custom CLI agent 로 <code>agy</code> 를 직접 등록하면 됩니다.</p>' },
