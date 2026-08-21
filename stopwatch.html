@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>스톱워치 — ORCA 실습 기준 결과</title>
+<style>
+  :root{
+    --paper:#FBFAF8; --ground:#F1EFEB; --ink:#1B1F24; --muted:#6B7078;
+    --line:#DFDCD6; --accent:#1F5B77; --lap:#5E7A46; --stop:#B5533A;
+    --shadow:0 1px 2px rgba(27,31,36,.06), 0 8px 24px rgba(27,31,36,.06);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --paper:#15181C; --ground:#1D2126; --ink:#E8E6E1; --muted:#9198A1;
+      --line:#2C3138; --accent:#63A6C6; --lap:#9DB87A; --stop:#DE8468;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#15181C; --ground:#1D2126; --ink:#E8E6E1; --muted:#9198A1;
+    --line:#2C3138; --accent:#63A6C6; --lap:#9DB87A; --stop:#DE8468;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",
+                system-ui,-apple-system,"Segoe UI",sans-serif;
+    display:flex; align-items:center; justify-content:center; padding:24px;
+  }
+  .card{
+    width:100%; max-width:440px; background:var(--ground);
+    border:1px solid var(--line); border-radius:14px;
+    box-shadow:var(--shadow); overflow:hidden;
+  }
+  header{
+    padding:14px 18px; border-bottom:1px solid var(--line);
+    font-family:ui-monospace,SFMono-Regular,"Cascadia Mono",Consolas,monospace;
+    font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--muted);
+  }
+  .readout{
+    padding:38px 18px 30px; text-align:center;
+    font-family:ui-monospace,SFMono-Regular,"Cascadia Mono",Consolas,monospace;
+    font-variant-numeric:tabular-nums; font-size:clamp(44px,13vw,64px);
+    font-weight:600; letter-spacing:.01em; line-height:1;
+  }
+  .readout .cs{font-size:.55em; color:var(--muted)}
+  .controls{display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--line); border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line)}
+  button{
+    appearance:none; border:0; background:var(--ground); color:var(--ink);
+    padding:15px 8px; cursor:pointer; font:inherit; font-size:14px;
+    font-weight:600; transition:background .12s;
+  }
+  button:hover{background:var(--paper)}
+  button:focus-visible{outline:2px solid var(--accent); outline-offset:-3px}
+  button:disabled{color:var(--muted); cursor:default}
+  button:disabled:hover{background:var(--ground)}
+  #startStop[data-running="true"]{color:var(--stop)}
+  #lap{color:var(--lap)}
+
+  .laps{max-height:216px; overflow-y:auto}
+  .laps:empty::after{
+    content:"랩 기록이 여기 쌓입니다";
+    display:block; padding:22px; text-align:center; color:var(--muted);
+    font-size:13px;
+  }
+  .lap-row{
+    display:grid; grid-template-columns:auto 1fr auto;
+    gap:12px; align-items:baseline;
+    padding:10px 18px; border-bottom:1px solid var(--line);
+    font-family:ui-monospace,SFMono-Regular,"Cascadia Mono",Consolas,monospace;
+    font-variant-numeric:tabular-nums; font-size:13px;
+  }
+  .lap-row:last-child{border-bottom:0}
+  .lap-n{color:var(--muted); font-size:11px}
+  .lap-split{color:var(--muted); text-align:right}
+  .lap-total{font-weight:600}
+
+  .note{
+    padding:14px 18px; border-top:1px solid var(--line);
+    font-size:12px; line-height:1.65; color:var(--muted);
+  }
+  .note b{color:var(--ink); font-weight:600}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="card">
+  <header>stopwatch — 기준 결과</header>
+
+  <div class="readout" id="display" role="timer" aria-live="off">
+    00:00<span class="cs">.00</span>
+  </div>
+
+  <div class="controls">
+    <button id="startStop" data-running="false">시작</button>
+    <button id="lap" disabled>랩</button>
+    <button id="reset" disabled>초기화</button>
+  </div>
+
+  <div class="laps" id="laps"></div>
+
+  <p class="note">
+    <b>어떻게 시간을 재는가</b><br>
+    1. 시작할 때 <code>performance.now()</code> 값을 원점으로 잡고, 화면을 그릴 때마다 지금 시각에서 원점을 뺀다.<br>
+    2. 정지하면 그때까지 흐른 값을 따로 쌓아 두고, 다시 시작할 때 원점을 새로 잡아 그 값에 더한다.<br>
+    3. 10 ms 간격은 화면을 갱신하는 주기일 뿐이고, 표시하는 값은 항상 실제 경과 시간에서 계산한다.
+  </p>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  // 경과 시간은 누적 카운터가 아니라 언제나 시계에서 뺀 값이다.
+  // origin  : 이번에 시작한 시점 (performance.now 기준)
+  // banked  : 지난 구간들에서 이미 흘러간 시간의 합
+  var origin = 0, banked = 0, running = false, ticker = null;
+  var laps = [];
+
+  var display  = document.getElementById("display");
+  var startStop = document.getElementById("startStop");
+  var lapBtn   = document.getElementById("lap");
+  var resetBtn = document.getElementById("reset");
+  var lapsBox  = document.getElementById("laps");
+
+  function elapsed(){
+    return running ? banked + (performance.now() - origin) : banked;
+  }
+
+  function format(ms){
+    var total = Math.floor(ms);
+    var cs = Math.floor(total % 1000 / 10);
+    var s  = Math.floor(total / 1000) % 60;
+    var m  = Math.floor(total / 60000);
+    return {
+      head: String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0"),
+      cs:   String(cs).padStart(2,"0")
+    };
+  }
+
+  function flat(ms){
+    var f = format(ms);
+    return f.head + "." + f.cs;
+  }
+
+  function paint(){
+    var f = format(elapsed());
+    display.firstChild.nodeValue = f.head;
+    display.querySelector(".cs").textContent = "." + f.cs;
+  }
+
+  function start(){
+    origin = performance.now();
+    running = true;
+    ticker = setInterval(paint, 10);
+    startStop.textContent = "정지";
+    startStop.dataset.running = "true";
+    lapBtn.disabled = false;
+    resetBtn.disabled = false;
+  }
+
+  function stop(){
+    banked = elapsed();          // 멈춘 순간의 실제 경과를 확정해 둔다
+    running = false;
+    clearInterval(ticker);
+    ticker = null;
+    startStop.textContent = "시작";
+    startStop.dataset.running = "false";
+    lapBtn.disabled = true;
+    paint();
+  }
+
+  function reset(){
+    if (running) { clearInterval(ticker); ticker = null; }
+    running = false; origin = 0; banked = 0;
+    laps = [];
+    lapsBox.textContent = "";     // 초기화는 랩 목록도 함께 비운다
+    startStop.textContent = "시작";
+    startStop.dataset.running = "false";
+    lapBtn.disabled = true;
+    resetBtn.disabled = true;
+    paint();
+  }
+
+  function addLap(){
+    var at = elapsed();
+    var prev = laps.length ? laps[laps.length - 1] : 0;
+    laps.push(at);
+
+    var row = document.createElement("div");
+    row.className = "lap-row";
+
+    var n = document.createElement("span");
+    n.className = "lap-n";
+    n.textContent = "#" + String(laps.length).padStart(2,"0");
+
+    var total = document.createElement("span");
+    total.className = "lap-total";
+    total.textContent = flat(at);          // 화면 표시와 같은 기준의 시각
+
+    var split = document.createElement("span");
+    split.className = "lap-split";
+    split.textContent = "+" + flat(at - prev);
+
+    row.append(n, total, split);
+    lapsBox.prepend(row);
+  }
+
+  startStop.addEventListener("click", function(){
+    running ? stop() : start();
+  });
+  lapBtn.addEventListener("click", addLap);
+  resetBtn.addEventListener("click", reset);
+
+  paint();
+})();
+</script>
+</body>
+</html>
