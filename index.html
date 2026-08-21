@@ -537,11 +537,12 @@ tr.hide{display:none}
     <div class="card" style="border-color:var(--go)">
       <h4>Antigravity <span style="font-weight:400;color:var(--go);font-size:13px">권장 · API 키 없음</span></h4>
       <p>
-        구글 계정으로 로그인하고 쓰던 구독 한도를 그대로 씁니다. <b>추가 비용 없음.</b><br>
+        구글 계정으로 로그인하고 쓰던 구독 한도를 그대로 씁니다. <b>추가 비용 없음.</b><br><b>Antigravity 앱(IDE)은 깔 필요 없습니다</b> — CLI 하나로 끝납니다.<br>
         <b>1.</b> 아래 한 줄로 설치 — <b>Node.js 도 npm 도 필요 없습니다</b><br>
         <b>2.</b> <b>터미널을 닫았다가 새로 열기</b> (안 그러면 <code>agy</code> 를 못 찾습니다)<br>
-        <b>3.</b> <code>agy</code> 실행 → 브라우저에서 구글 계정 로그인<br>
-        <b>4.</b> <code>agy</code> 가 혼자 뜨면 준비 끝
+        <b>3.</b> <code>agy</code> 실행 → <b>1. Google OAuth</b> 고르기<br>
+        <b>4.</b> 브라우저에서 로그인 → 웹에 뜬 <b>인증 코드</b>를 복사해<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;터미널의 <code>authorization code...</code> 칸에 붙여넣기
       </p>
       <p style="margin-top:8px; font-family:var(--mono); font-size:12px; color:var(--ink); background:var(--sunk); padding:8px 10px; border-radius:6px; word-break:break-all">
         irm https://antigravity.google/cli/install.ps1 | iex
@@ -951,7 +952,8 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
             '그대로 씁니다. 추가 비용도 없습니다.</p>' +
             '<ol><li>아래 한 줄로 설치 (Node.js 도 npm 도 필요 없습니다)</li>' +
             '<li><b>터미널을 닫았다가 새로 여세요.</b> 설치 직후에는 <code>agy</code> 가 안 잡힙니다</li>' +
-            '<li><code>agy</code> 실행 → 브라우저가 열리면 구글 계정으로 로그인</li>' +
+            '<li><code>agy</code> 실행 → <code>1. Google OAuth</code> 고르기</li>' +
+            '<li>브라우저에서 로그인하면 웹에 <b>인증 코드</b>가 뜹니다. 복사해서 터미널의 <code>authorization code...</code> 칸에 붙여넣기</li>' +
             '<li><code>agy</code> 가 혼자 잘 뜨면 준비 끝</li></ol>' +
             '<p>로그인 정보는 <b>Windows 자격 증명 관리자</b>(맥은 키체인)에 저장됩니다. ' +
             'ORCA 목록에 안 보이면 custom CLI agent 로 <code>agy</code> 를 직접 등록하면 됩니다.</p>' },
