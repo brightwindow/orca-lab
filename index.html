@@ -145,7 +145,13 @@ ol.do .why{grid-column:2; display:block; color:var(--muted);
   height:fit-content; margin-top:4px}
 .tip.warn{background:var(--warn-soft)}
 .tip.warn::before{content:"주의"; color:var(--warn)}
-.tip p{margin:0; max-width:none}
+/* ::before is a grid item, so every real child must be pinned to column 2 —
+   otherwise the second child onward wraps into the narrow badge column and
+   renders one letter per line. */
+.tip > *{grid-column:2; margin:0; max-width:none}
+.tip > * + *{margin-top:9px}
+.tip ol,.tip ul{padding-left:20px; line-height:1.7}
+.tip li{margin:3px 0}
 
 /* ── code ───────────────────────────────────────────────────────────── */
 .snip{margin:16px 0; border:1px solid var(--line); border-radius:11px;
@@ -792,7 +798,7 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
         <tr><td class="k">없는 명령이라고 나옴</td><td>아직 안 깔린 것입니다. 실습 2 로 돌아가서 깔고 오세요</td></tr>
         <tr><td class="k">보안 오류 · 스크립트를 실행할 수 없음</td><td>Windows 기본 설정 탓입니다. 이름 뒤에 <code>.cmd</code> 를 붙여 치거나, <code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> 를 한 번 실행하세요</td></tr>
         <tr><td class="k">로그인하라고 함</td><td>한 번만 따라가면 다음부터는 안 묻습니다</td></tr>
-        <tr><td class="k">Gemini 로그인이 안 됨<br><span style="font-weight:400; color:var(--faint); font-size:13px">no longer supported for individuals</span></td><td>구글이 개인용 로그인을 닫았습니다. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> 에서 키를 받아 <code>setx GEMINI_API_KEY "키"</code> 후 터미널을 새로 여세요</td></tr>
+        <tr><td class="k">Gemini 로그인이 안 됨<br><span style="font-weight:400; color:var(--faint); font-size:13px">no longer supported for individuals</span></td><td>구글이 개인용 로그인을 닫았습니다. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> 에서 키를 받아 <code>$env:GEMINI_API_KEY = Read-Host "키"</code> 로 넣고 다시 실행하세요</td></tr>
         <tr><td class="k">방화벽이 Node.js 를 물어봄<br><span style="font-weight:400; color:var(--faint); font-size:13px">개인/공용 네트워크</span></td><td>로그인 창을 받으려고 잠깐 여는 것입니다. <b>취소해도 됩니다</b> — 방화벽은 내 컴퓨터 안 통신(127.0.0.1)은 막지 않습니다</td></tr>
         <tr><td class="k">터미널 경로가 딴 데임</td><td>왼쪽 목록에서 <code>stopwatch</code> 를 다시 누르세요</td></tr>
         <tr><td class="k">주소가 안 열림</td><td>터미널에 서버가 켜져 있는지 보고, 포트 번호를 다시 확인하세요</td></tr>
@@ -866,12 +872,12 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
             '<b>API 키</b>로 쓰세요.</p>' +
             '<ol><li><a href="https://aistudio.google.com/apikey" target="_blank" ' +
             'rel="noopener">aistudio.google.com/apikey</a> 에서 키 만들기 (무료)</li>' +
-            '<li>터미널에 <code>$env:GEMINI_API_KEY = "받은키"</code> 입력' +
-            ' <b>(공용 컴퓨터면 반드시 이 방식)</b></li>' +
+            '<li>터미널에 <code>$env:GEMINI_API_KEY = Read-Host "키"</code> 를 치고, ' +
+            '물어보면 키를 붙여넣기</li>' +
             '<li>이어서 실행. 메뉴가 뜨면 <code>2. Use Gemini API Key</code> 고르기</li></ol>' +
-            '<p>API 키를 쓰면 방화벽 창도 안 뜹니다. ' +
-            '내 노트북이라 매번 치기 귀찮으면 <code>setx GEMINI_API_KEY "키"</code> 로 ' +
-            '한 번만 저장하고 터미널을 새로 여세요.</p>' },
+            '<p>키를 명령줄에 직접 치면 PowerShell 기록 파일에 평문으로 남습니다. ' +
+            '<code>Read-Host</code> 로 넣으면 안 남습니다. ' +
+            'API 키를 쓰면 방화벽 창도 안 뜹니다.</p>' },
     codex:  { cmd: "codex",  pkg: "@openai/codex", made: "OpenAI",
       note: '<p>처음 실행하면 브라우저가 열리고 <b>한 번만</b> 로그인하면 됩니다.</p>' }
   };
