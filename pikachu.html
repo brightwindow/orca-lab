@@ -3,319 +3,393 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>피카츄 러너 — 이런 게 뜨면 성공</title>
+<title>Pikachu Runner — MCRG</title>
 <style>
   :root{
-    --paper:#F7F7F7; --ink:#535353; --line:#D8D8D8; --accent:#2F6A4F;
-    --mark:#1B2430;
+    --bg:#0E0B1A; --card:#171326; --edge:#2A2340;
+    --text:#E9E4F5; --dim:#9A93B5; --gold:#F7D02C;
   }
-  @media (prefers-color-scheme:dark){
-    :root:not([data-theme="light"]){
-      --paper:#15181C; --ink:#B8BCC0; --line:#2C3138; --accent:#79B392;
-      --mark:#C9D2DC;
-    }
-  }
-  :root[data-theme="dark"]{
-    --paper:#15181C; --ink:#B8BCC0; --line:#2C3138; --accent:#79B392;
-    --mark:#C9D2DC;
-  }
-  *{box-sizing:border-box}
+  *{box-sizing:border-box; margin:0; padding:0}
+  html,body{height:100%}
   body{
-    margin:0; min-height:100vh; background:var(--paper); color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #241a3d 0%, transparent 60%),
+      var(--bg);
+    color:var(--text); min-height:100%;
     font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",
                 system-ui,-apple-system,"Segoe UI",sans-serif;
     display:flex; flex-direction:column; align-items:center;
-    justify-content:center; gap:16px; padding:20px; user-select:none;
+    justify-content:center; gap:18px; padding:24px; user-select:none;
   }
-  #wrap{width:100%; max-width:680px}
-  canvas{
-    width:100%; height:auto; display:block; border-bottom:2px solid var(--line);
-    touch-action:manipulation; cursor:pointer;
+
+  .frame{
+    width:100%; max-width:880px; border-radius:18px; overflow:hidden;
+    background:var(--card); border:1px solid var(--edge);
+    box-shadow:0 30px 80px rgba(0,0,0,.55), 0 2px 0 rgba(255,255,255,.04) inset;
   }
-  .hint{
-    font-size:13.5px; color:var(--ink); opacity:.7; text-align:center;
-    line-height:1.7; max-width:680px;
+  .bar{
+    display:flex; align-items:center; gap:10px;
+    padding:11px 16px; border-bottom:1px solid var(--edge);
+    background:linear-gradient(180deg,#1D1830,#171326);
   }
-  .hint b{opacity:1; color:var(--accent)}
+  .dot{width:10px; height:10px; border-radius:50%; background:#3A3355}
+  .dot.a{background:#F7D02C} .dot.b{background:#E4572E}
+  .title{
+    margin-left:6px; font-family:ui-monospace,SFMono-Regular,Consolas,monospace;
+    font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--dim);
+  }
+  .title b{color:var(--gold); font-weight:700}
+  canvas{display:block; width:100%; height:auto; cursor:pointer;
+         touch-action:manipulation; background:#120E22}
+
+  .legend{
+    display:flex; gap:22px; flex-wrap:wrap; justify-content:center;
+    font-size:13.5px; color:var(--dim);
+  }
+  .legend span{display:inline-flex; align-items:center; gap:7px}
   kbd{
-    font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:12px;
-    border:1px solid var(--line); border-bottom-width:2px; border-radius:4px;
-    padding:1px 6px;
+    font-family:ui-monospace,SFMono-Regular,Consolas,monospace; font-size:11.5px;
+    color:var(--text); background:#221C38; border:1px solid var(--edge);
+    border-bottom-width:2px; border-radius:5px; padding:2px 7px;
   }
+  @media (max-width:520px){ .legend{gap:14px; font-size:12.5px} }
 </style>
 </head>
 <body>
-  <div id="wrap">
-    <canvas id="game" width="1360" height="360" aria-label="피카츄 러너"></canvas>
+  <div class="frame">
+    <div class="bar">
+      <i class="dot a"></i><i class="dot b"></i><i class="dot"></i>
+      <span class="title"><b>MCRG</b> · Pikachu Runner</span>
+    </div>
+    <canvas id="game" width="1760" height="660" aria-label="피카츄 러너"></canvas>
   </div>
-  <p class="hint">
-    <kbd>Space</kbd> 또는 <kbd>↑</kbd> 점프 · <kbd>↓</kbd> 숙이기 · 화면을 눌러도 됩니다<br>
-    부딪히면 끝납니다. <b>다시 시작하려면 한 번 더 누르세요.</b>
+
+  <p class="legend">
+    <span><kbd>Space</kbd> / <kbd>↑</kbd> 점프</span>
+    <span><kbd>↓</kbd> 숙이기</span>
+    <span><kbd>화면 클릭</kbd> 도 됩니다</span>
   </p>
 
 <script>
 (function(){
   "use strict";
 
-  var cv = document.getElementById("game");
-  var cx = cv.getContext("2d");
+  var cv = document.getElementById("game"), cx = cv.getContext("2d");
   var W = cv.width, H = cv.height;
-  var GROUND = H - 60;
+  var GY = H - 132;                       // 지면 y
+  var rm = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // 피카츄 색
-  var YELLOW = "#F7D02C", DARK = "#2B2B2B",
-      CHEEK = "#E4572E", MOUTH = "#8A5A00";
+  // ── 팔레트 ──────────────────────────────────────────────────────────
+  var SKY = [[0,"#141033"],[0.42,"#3B2159"],[0.72,"#8E3B5B"],[0.88,"#E0704B"],[1,"#F6B25E"]];
+  var HILL = ["#241A44","#1C1435","#150F28"];
+  var GROUND = "#100B1E", GRASS = "#2A1D4A";
+  var YEL = "#F7D02C", YEL_D = "#D9A800", DARK = "#241A08",
+      CHEEK = "#EE5B4B", GLOW = "rgba(247,208,44,.30)";
 
-  function cssVar(n, fallback){
-    var v = getComputedStyle(document.documentElement).getPropertyValue(n).trim();
-    return v || fallback;
-  }
-  function ink(){ return cssVar("--ink", "#535353"); }
-  function mark(){ return cssVar("--mark", "#1B2430"); }
+  // ── 상태 ────────────────────────────────────────────────────────────
+  var S = {READY:0, RUN:1, OVER:2}, state;
+  var last, speed, dist, score, best, obs, dust, shake, blink, flash;
+  var P = {x:190, y:0, vy:0, w:76, h:84, duck:false, run:0, sq:1};
+  var G = 5200, JUMP = -1580, V0 = 620;
 
-  var STATE = { READY: 0, RUN: 1, OVER: 2 };
-  var state, last, speed, dist, score, best, cacti, clouds, blink;
-
-  var poke = { x: 60, y: 0, vy: 0, w: 46, h: 50, duck: false, leg: 0 };
-
-  var GRAVITY = 2600, JUMP_V = -900, SPEED0 = 380;
-
-  try { best = parseInt(localStorage.getItem("pikachu-best") || "0", 10) || 0; }
-  catch (e) { best = 0; }
+  try { best = +(localStorage.getItem("mcrg-pikachu") || 0) || 0; } catch(e){ best = 0; }
 
   function reset(){
-    state = STATE.READY;
-    speed = SPEED0; dist = 0; score = 0; blink = 0;
-    cacti = []; clouds = [{x: W * 0.6, y: 70}, {x: W * 1.1, y: 120}];
-    poke.y = 0; poke.vy = 0; poke.duck = false; poke.leg = 0;
+    state = S.READY; speed = V0; dist = 0; score = 0;
+    obs = []; dust = []; shake = 0; blink = 0; flash = 0;
+    P.y = 0; P.vy = 0; P.duck = false; P.run = 0; P.sq = 1;
     last = 0;
   }
-  function start(){ if (state === STATE.RUN) return; reset(); state = STATE.RUN; jump(); }
-  function jump(){ if (poke.y === 0) poke.vy = JUMP_V; }
+  function begin(){ if (state === S.RUN) return; reset(); state = S.RUN; hop(); }
+  function hop(){
+    if (P.y === 0){ P.vy = JUMP; P.sq = 0.78; puff(P.x + 30, GY, 7); }
+  }
+  function tap(){ state === S.RUN ? hop() : begin(); }
 
-  function press(){ if (state === STATE.RUN) jump(); else start(); }
-  document.addEventListener("keydown", function(e){
-    if (e.code === "Space" || e.code === "ArrowUp"){ e.preventDefault(); press(); }
-    if (e.code === "ArrowDown") poke.duck = true;
+  addEventListener("keydown", function(e){
+    if (e.code === "Space" || e.code === "ArrowUp"){ e.preventDefault(); tap(); }
+    if (e.code === "ArrowDown") P.duck = true;
   });
-  document.addEventListener("keyup", function(e){
-    if (e.code === "ArrowDown") poke.duck = false;
-  });
-  cv.addEventListener("pointerdown", function(e){ e.preventDefault(); press(); });
+  addEventListener("keyup", function(e){ if (e.code === "ArrowDown") P.duck = false; });
+  cv.addEventListener("pointerdown", function(e){ e.preventDefault(); tap(); });
 
-  function spawn(){
-    var big = Math.random() < 0.35;
-    var n = 1 + Math.floor(Math.random() * (big ? 2 : 3));
-    var w = big ? 26 : 18, h = big ? 56 : 38;
-    cacti.push({ x: W + 20, w: w * n + (n - 1) * 4, h: h, n: n, uw: w });
+  // ── 먼지 ────────────────────────────────────────────────────────────
+  function puff(x, y, n){
+    if (rm) return;
+    for (var i = 0; i < n; i++)
+      dust.push({x:x, y:y, vx:-40 - Math.random()*180, vy:-Math.random()*150,
+                 r:3 + Math.random()*7, a:0.5});
   }
 
-  function px(x, y, w, h){ cx.fillRect(x, y, w, h); }
+  // ── 장애물 ──────────────────────────────────────────────────────────
+  function spawn(){
+    var tall = Math.random() < 0.34;
+    var n = 1 + ((Math.random() * (tall ? 2 : 3)) | 0);
+    var uw = tall ? 30 : 22, h = tall ? 104 : 70;
+    obs.push({x:W + 40, uw:uw, h:h, n:n, w:uw*n + (n-1)*9});
+  }
 
-  // ── 배경 마크 ───────────────────────────────────────────────────────
-  // 가운데 안내문·점수·달리는 길을 모두 피해 왼쪽 위에 둔다.
-  // 게임을 가리지 않도록 아주 옅게.
-  function drawMark(){
+  function rr(x, y, w, h, r){
+    cx.beginPath();
+    if (cx.roundRect) cx.roundRect(x, y, w, h, r);
+    else cx.rect(x, y, w, h);
+    cx.fill();
+  }
+
+  // ── 배경 ────────────────────────────────────────────────────────────
+  var sky = null;
+  function drawSky(){
+    if (!sky){
+      sky = cx.createLinearGradient(0, 0, 0, GY + 40);
+      for (var i = 0; i < SKY.length; i++) sky.addColorStop(SKY[i][0], SKY[i][1]);
+    }
+    cx.fillStyle = sky; cx.fillRect(0, 0, W, GY + 40);
+
+    // 지는 해
+    var sx = W * 0.76, sy = GY - 96;
+    var g = cx.createRadialGradient(sx, sy, 8, sx, sy, 190);
+    g.addColorStop(0, "rgba(255,214,150,.95)");
+    g.addColorStop(0.35, "rgba(255,164,96,.42)");
+    g.addColorStop(1, "rgba(255,140,80,0)");
+    cx.fillStyle = g; cx.beginPath(); cx.arc(sx, sy, 190, 0, 7); cx.fill();
+    cx.fillStyle = "rgba(255,228,178,.92)";
+    cx.beginPath(); cx.arc(sx, sy, 46, 0, 7); cx.fill();
+
+    // 배경 마크 — 하늘에 크게, 아주 옅게
     cx.save();
-    cx.fillStyle = mark();
-    cx.textAlign = "left";
-    cx.globalAlpha = 0.09;
-    cx.font = "bold 76px system-ui, sans-serif";
-    cx.letterSpacing = "10px";
-    cx.fillText("MCRG", 34, 92);
+    cx.globalAlpha = 0.07; cx.fillStyle = "#FFFFFF";
+    cx.textAlign = "center"; cx.textBaseline = "middle";
+    cx.font = "800 190px system-ui, sans-serif";
+    if (cx.letterSpacing !== undefined) cx.letterSpacing = "26px";
+    cx.fillText("MCRG", W / 2, GY - 250);
     cx.restore();
   }
 
-  // ── 피카츄 ──────────────────────────────────────────────────────────
-  function drawPikachu(){
-    var bx = poke.x;
-    var by = GROUND - poke.h - poke.y;
-
-    if (poke.duck && poke.y === 0){
-      by = GROUND - 30;
-      cx.fillStyle = DARK;                       // 꼬리
-      px(bx - 22, by - 8, 16, 7);
-      px(bx - 12, by - 16, 7, 12);
-      cx.fillStyle = YELLOW;
-      px(bx - 6, by, 54, 26);                    // 몸통
-      px(bx + 42, by - 6, 24, 22);               // 머리
-      cx.fillStyle = DARK;
-      px(bx + 52, by - 22, 8, 18);               // 귀
-      px(bx + 54, by - 26, 8, 6);
-      cx.fillStyle = CHEEK; px(bx + 44, by + 4, 7, 6);
-      cx.fillStyle = DARK;  px(bx + 58, by - 2, 5, 5);
-      cx.fillStyle = YELLOW;
-      px(bx + 2, by + 26, 11, 6); px(bx + 26, by + 26, 11, 6);
-      return;
+  function hills(layer, sp, amp, base, col){
+    var off = (dist * sp) % 460;
+    cx.fillStyle = col; cx.beginPath(); cx.moveTo(-off - 460, GY);
+    for (var x = -460; x <= W + 460; x += 46){
+      var k = (x + off + layer * 700) * 0.0042;
+      var y = GY - base - Math.sin(k) * amp - Math.sin(k * 2.3 + layer) * amp * 0.4;
+      cx.lineTo(x - off, y);
     }
-
-    // 꼬리 (번개 모양)
-    cx.fillStyle = DARK;
-    px(bx - 16, by + 26, 12, 8);
-    cx.fillStyle = YELLOW;
-    px(bx - 24, by + 8, 14, 10);
-    px(bx - 14, by + 16, 12, 10);
-
-    // 귀
-    cx.fillStyle = YELLOW;
-    px(bx + 12, by - 20, 9, 22);
-    px(bx + 30, by - 22, 9, 24);
-    cx.fillStyle = DARK;
-    px(bx + 12, by - 24, 9, 7);
-    px(bx + 30, by - 27, 9, 7);
-
-    // 머리 · 몸통
-    cx.fillStyle = YELLOW;
-    px(bx + 8, by, 36, 28);
-    px(bx + 6, by + 24, 34, 28);
-
-    // 눈 · 코
-    cx.fillStyle = DARK;
-    px(bx + 16, by + 8, 6, 7);
-    px(bx + 32, by + 8, 6, 7);
-    px(bx + 25, by + 17, 4, 3);
-    // 눈 반짝
-    cx.fillStyle = "#FFFFFF";
-    px(bx + 17, by + 9, 2, 2); px(bx + 33, by + 9, 2, 2);
-
-    // 볼 (빨간 원)
-    cx.fillStyle = CHEEK;
-    px(bx + 8, by + 15, 8, 7);
-    px(bx + 37, by + 15, 8, 7);
-
-    // 입
-    cx.fillStyle = MOUTH;
-    px(bx + 22, by + 21, 10, 3);
-
-    // 팔
-    cx.fillStyle = YELLOW;
-    px(bx + 2, by + 30, 8, 12);
-
-    // 다리 (달리는 모션)
-    var swing = Math.floor(poke.leg) % 2 === 0;
-    cx.fillStyle = YELLOW;
-    if (poke.y > 0){
-      px(bx + 10, by + 50, 9, 10); px(bx + 26, by + 50, 9, 10);
-    } else if (swing){
-      px(bx + 10, by + 50, 9, 12); px(bx + 26, by + 50, 9, 6);
-    } else {
-      px(bx + 10, by + 50, 9, 6);  px(bx + 26, by + 50, 9, 12);
-    }
-  }
-
-  function drawCactus(o){
-    cx.fillStyle = ink();
-    for (var i = 0; i < o.n; i++){
-      var x = o.x + i * (o.uw + 4), y = GROUND - o.h;
-      px(x, y, o.uw, o.h);
-      px(x - 7, y + o.h * 0.30, 7, o.h * 0.18);
-      px(x + o.uw, y + o.h * 0.42, 7, o.h * 0.16);
-    }
+    cx.lineTo(W + 460, GY); cx.closePath(); cx.fill();
   }
 
   function drawGround(){
-    cx.fillStyle = ink();
-    px(0, GROUND, W, 3);
-    var off = dist % 60;
-    for (var x = -off; x < W; x += 60){
-      px(x + 12, GROUND + 10, 10, 3);
-      px(x + 38, GROUND + 18, 6, 3);
+    cx.fillStyle = GROUND; cx.fillRect(0, GY, W, H - GY);
+    cx.fillStyle = GRASS;  cx.fillRect(0, GY, W, 5);
+    cx.fillStyle = "rgba(255,255,255,.05)";
+    var off = dist % 150;
+    for (var x = -off; x < W; x += 150){
+      cx.fillRect(x + 24, GY + 30, 54, 4);
+      cx.fillRect(x + 100, GY + 58, 28, 4);
     }
   }
 
-  function drawCloud(c){
-    cx.fillStyle = ink(); cx.globalAlpha = 0.35;
-    px(c.x, c.y, 46, 8); px(c.x + 10, c.y - 7, 28, 8); px(c.x + 6, c.y + 8, 34, 6);
-    cx.globalAlpha = 1;
+  // ── 피카츄 ──────────────────────────────────────────────────────────
+  function pikachu(){
+    var duck = P.duck && P.y === 0;
+    var h = duck ? 52 : P.h * P.sq;
+    var w = duck ? 104 : P.w;
+    var x = P.x, y = GY - h - P.y;
+
+    // 그림자 (높이에 따라 작아짐)
+    var k = Math.max(0, 1 - P.y / 260);
+    cx.save(); cx.globalAlpha = 0.34 * k; cx.fillStyle = "#000";
+    cx.beginPath(); cx.ellipse(x + w/2, GY + 3, 40 * k + 14, 8 * k + 3, 0, 0, 7);
+    cx.fill(); cx.restore();
+
+    // 발광
+    cx.save(); cx.shadowColor = GLOW; cx.shadowBlur = 34;
+
+    var s = w / 76;                       // 기준 76px 대비 배율
+    function px(a, b, c, d, col){
+      cx.fillStyle = col || YEL;
+      rr(x + a*s, y + b*(h/84), c*s, d*(h/84), 3);
+    }
+
+    if (duck){
+      px(-14, 6, 26, 12, DARK);           // 꼬리
+      px(0, 4, 78, 40);                   // 몸통
+      px(68, -6, 34, 34);                 // 머리
+      px(82, -30, 13, 26, DARK);          // 귀
+      px(70, 12, 12, 10, CHEEK);
+      px(90, 2, 7, 7, DARK);
+      px(6, 40, 18, 10, YEL_D); px(44, 40, 18, 10, YEL_D);
+      cx.restore(); return;
+    }
+
+    // 꼬리 (번개)
+    px(-26, 34, 20, 14, YEL_D);
+    px(-38, 14, 22, 15);
+    px(-22, 26, 18, 14);
+
+    // 귀
+    px(18, -30, 14, 36); px(46, -34, 14, 40);
+    px(18, -36, 14, 12, DARK); px(46, -41, 14, 12, DARK);
+
+    // 머리 / 몸통
+    px(10, -4, 58, 46);
+    px(6, 34, 58, 46);
+
+    // 얼굴
+    px(24, 10, 9, 11, DARK); px(48, 10, 9, 11, DARK);
+    px(26, 12, 3, 3, "#FFF");  px(50, 12, 3, 3, "#FFF");
+    px(38, 24, 6, 4, DARK);
+    px(10, 20, 13, 11, CHEEK); px(56, 20, 13, 11, CHEEK);
+
+    // 팔 · 다리
+    px(0, 44, 13, 18, YEL_D);
+    var sw = ((P.run | 0) % 2) === 0;
+    if (P.y > 0){ px(14, 74, 14, 14, YEL_D); px(40, 74, 14, 14, YEL_D); }
+    else if (sw){ px(14, 74, 14, 18, YEL_D); px(40, 76, 14, 10, YEL_D); }
+    else        { px(14, 76, 14, 10, YEL_D); px(40, 74, 14, 18, YEL_D); }
+
+    cx.restore();
   }
 
-  function drawScore(){
-    cx.fillStyle = ink();
-    cx.font = "bold 26px ui-monospace, Consolas, monospace";
-    cx.textAlign = "right";
-    if (best > 0){
-      cx.globalAlpha = 0.5;
-      cx.fillText("HI " + String(best).padStart(5, "0"), W - 130, 44);
-      cx.globalAlpha = 1;
+  function drawObs(o){
+    // 바닥 그림자 — 이게 없으면 장애물이 공중에 뜬 것처럼 보인다
+    cx.save(); cx.globalAlpha = 0.5; cx.fillStyle = "#0A0616";
+    cx.beginPath();
+    cx.ellipse(o.x + o.w/2, GY + 4, o.w/2 + 16, 9, 0, 0, 7);
+    cx.fill(); cx.restore();
+
+    for (var i = 0; i < o.n; i++){
+      var x = o.x + i * (o.uw + 9), y = GY - o.h;
+      cx.fillStyle = "#0F0A1E"; rr(x - 2, y - 2, o.uw + 4, o.h + 4, o.uw/2.2); // 외곽
+      cx.fillStyle = "#33245A"; rr(x, y, o.uw, o.h, o.uw/2.4);                 // 몸
+      cx.fillStyle = "#1B1235"; rr(x + 3, y + 6, o.uw - 6, o.h - 10, o.uw/3);  // 안쪽 그늘
+      cx.fillStyle = "rgba(255,186,128,.75)";                                  // 림라이트
+      rr(x + o.uw - 7, y + 9, 5, o.h - 20, 3);
+      // 팔
+      cx.fillStyle = "#0F0A1E"; rr(x - 15, y + o.h*0.30 - 2, 17, o.h*0.19 + 4, 7);
+      cx.fillStyle = "#33245A"; rr(x - 13, y + o.h*0.30, 14, o.h*0.19, 6);
+      cx.fillStyle = "#0F0A1E"; rr(x + o.uw - 2, y + o.h*0.48 - 2, 17, o.h*0.17 + 4, 7);
+      cx.fillStyle = "#33245A"; rr(x + o.uw, y + o.h*0.48, 14, o.h*0.17, 6);
     }
-    cx.fillText(String(Math.floor(score)).padStart(5, "0"), W - 20, 44);
+  }
+
+  // ── HUD ─────────────────────────────────────────────────────────────
+  function hud(){
+    cx.textAlign = "right"; cx.textBaseline = "alphabetic";
+    cx.font = "700 20px ui-monospace, Consolas, monospace";
+    if (cx.letterSpacing !== undefined) cx.letterSpacing = "2px";
+    if (best){
+      cx.fillStyle = "rgba(233,228,245,.45)";
+      cx.fillText("HI " + ("" + best).padStart(5, "0"), W - 200, 62);
+    }
+    cx.fillStyle = "#FFF6D8";
+    cx.font = "800 40px ui-monospace, Consolas, monospace";
+    cx.fillText(("" + (score | 0)).padStart(5, "0"), W - 44, 66);
+    if (cx.letterSpacing !== undefined) cx.letterSpacing = "0px";
     cx.textAlign = "left";
   }
 
-  function center(text, sub){
-    cx.fillStyle = ink(); cx.textAlign = "center";
-    cx.font = "bold 34px system-ui, sans-serif";
-    cx.fillText(text, W / 2, H / 2 - 10);
-    if (sub){
-      cx.globalAlpha = 0.6;
-      cx.font = "18px system-ui, sans-serif";
-      cx.fillText(sub, W / 2, H / 2 + 26);
-      cx.globalAlpha = 1;
-    }
-    cx.textAlign = "left";
+  function panel(title, sub){
+    cx.save();
+    cx.fillStyle = "rgba(10,7,20,.62)"; cx.fillRect(0, 0, W, H);
+    cx.textAlign = "center";
+    cx.fillStyle = "#FFF6D8";
+    cx.font = "800 62px system-ui, sans-serif";
+    cx.fillText(title, W/2, H/2 - 6);
+    cx.fillStyle = "rgba(233,228,245,.72)";
+    cx.font = "400 25px system-ui, sans-serif";
+    cx.fillText(sub, W/2, H/2 + 46);
+    cx.textAlign = "left"; cx.restore();
   }
 
+  // ── 루프 ────────────────────────────────────────────────────────────
   function frame(ts){
     requestAnimationFrame(frame);
     if (!last) last = ts;
-    var dt = Math.min((ts - last) / 1000, 0.05);
-    last = ts;
+    var dt = Math.min((ts - last)/1000, 0.05); last = ts;
 
-    cx.clearRect(0, 0, W, H);
-    drawMark();                      // 제일 뒤에 깔린다
-
-    if (state === STATE.RUN){
+    if (state === S.RUN){
       dist  += speed * dt;
-      score += speed * dt * 0.06;
-      speed += 8 * dt;
+      score += speed * dt * 0.045;
+      speed += 13 * dt;
 
-      poke.vy += GRAVITY * dt;
-      poke.y  -= poke.vy * dt;
-      if (poke.y < 0){ poke.y = 0; poke.vy = 0; }
-      poke.leg += dt * (speed / 42);
-
-      var lastC = cacti[cacti.length - 1];
-      if (!lastC || W - lastC.x > 260 + Math.random() * 320) spawn();
-      for (var i = cacti.length - 1; i >= 0; i--){
-        cacti[i].x -= speed * dt;
-        if (cacti[i].x + cacti[i].w < -40) cacti.splice(i, 1);
+      var was = P.y;
+      P.vy += G * dt; P.y -= P.vy * dt;
+      if (P.y < 0){
+        P.y = 0; P.vy = 0;
+        if (was > 6){ P.sq = 1.22; puff(P.x + 24, GY, 10); shake = 5; }
       }
-      for (var j = 0; j < clouds.length; j++){
-        clouds[j].x -= speed * dt * 0.25;
-        if (clouds[j].x < -60){
-          clouds[j].x = W + Math.random() * 200;
-          clouds[j].y = 50 + Math.random() * 90;
-        }
+      P.sq += (1 - P.sq) * Math.min(1, dt * 12);
+      P.run += dt * speed / 46;
+      if (P.y === 0 && ((P.run|0) % 2) === 0 && Math.random() < dt * 9)
+        puff(P.x + 12, GY, 1);
+
+      var lastO = obs[obs.length - 1];
+      if (!lastO || W - lastO.x > 330 + Math.random() * 420) spawn();
+      for (var i = obs.length - 1; i >= 0; i--){
+        obs[i].x -= speed * dt;
+        if (obs[i].x + obs[i].w < -60) obs.splice(i, 1);
       }
 
-      var dh = poke.duck && poke.y === 0 ? 26 : poke.h;
-      var dy = GROUND - dh - poke.y;
-      var dw = poke.duck && poke.y === 0 ? 56 : 40;
-      for (var k = 0; k < cacti.length; k++){
-        var o = cacti[k];
-        if (poke.x + 6 < o.x + o.w - 4 && poke.x + dw - 6 > o.x + 4 &&
-            GROUND - o.h + 4 < dy + dh - 4){
-          state = STATE.OVER;
-          if (Math.floor(score) > best){
-            best = Math.floor(score);
-            try { localStorage.setItem("pikachu-best", String(best)); } catch (e) {}
+      var duck = P.duck && P.y === 0;
+      var ph = duck ? 52 : P.h, pw = duck ? 104 : P.w, py = GY - ph - P.y;
+      for (var k2 = 0; k2 < obs.length; k2++){
+        var o = obs[k2];
+        if (P.x + 16 < o.x + o.w - 8 && P.x + pw - 16 > o.x + 8 &&
+            py + ph - 10 > GY - o.h + 8){
+          state = S.OVER; shake = 16; flash = 1;
+          puff(P.x + 40, GY - 30, 16);
+          if ((score|0) > best){
+            best = score | 0;
+            try { localStorage.setItem("mcrg-pikachu", "" + best); } catch(e){}
           }
         }
       }
     }
 
-    for (var m = 0; m < clouds.length; m++) drawCloud(clouds[m]);
-    drawGround();
-    for (var n = 0; n < cacti.length; n++) drawCactus(cacti[n]);
-    drawPikachu();
-    drawScore();
-
-    if (state === STATE.READY){
-      blink += dt;
-      if (Math.floor(blink * 1.6) % 2 === 0)
-        center("스페이스바를 눌러 시작", "부딪히지 않게 점프하세요");
+    for (var d = dust.length - 1; d >= 0; d--){
+      var p = dust[d];
+      p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 340 * dt; p.a -= dt * 1.15;
+      if (p.a <= 0) dust.splice(d, 1);
     }
-    if (state === STATE.OVER) center("G A M E   O V E R", "다시 시작하려면 스페이스바");
+    if (shake > 0) shake = Math.max(0, shake - dt * 46);
+    if (flash > 0) flash = Math.max(0, flash - dt * 3.2);
+
+    // 그리기
+    cx.save();
+    if (shake > 0.2)
+      cx.translate((Math.random()-0.5)*shake, (Math.random()-0.5)*shake);
+
+    drawSky();
+    hills(0, 0.055, 46, 118, HILL[0]);
+    hills(1, 0.11, 62, 66,  HILL[1]);
+    hills(2, 0.20, 40, 20,  HILL[2]);
+    drawGround();
+
+    for (var m = 0; m < obs.length; m++) drawObs(obs[m]);
+
+    cx.save();
+    for (var n = 0; n < dust.length; n++){
+      var q = dust[n];
+      cx.globalAlpha = Math.max(0, q.a);
+      cx.fillStyle = "#C8B9E8";
+      cx.beginPath(); cx.arc(q.x, q.y, q.r, 0, 7); cx.fill();
+    }
+    cx.restore();
+
+    pikachu();
+    cx.restore();
+
+    hud();
+
+    if (flash > 0){
+      cx.fillStyle = "rgba(255,120,90," + (flash * 0.34) + ")";
+      cx.fillRect(0, 0, W, H);
+    }
+    if (state === S.READY){
+      blink += dt;
+      if (rm || (blink * 1.5 | 0) % 2 === 0)
+        panel("PIKACHU RUNNER", "스페이스바를 눌러 시작");
+    }
+    if (state === S.OVER) panel("GAME OVER", "스페이스바로 다시 시작");
   }
 
   reset();
