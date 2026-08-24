@@ -122,11 +122,7 @@
     cx.globalAlpha = 0.09;
     cx.font = "bold 76px system-ui, sans-serif";
     cx.letterSpacing = "10px";
-    cx.fillText("MCRG", 34, 84);
-    cx.globalAlpha = 0.075;
-    cx.font = "bold 26px system-ui, sans-serif";
-    cx.letterSpacing = "16px";
-    cx.fillText("PEAK", 38, 118);
+    cx.fillText("MCRG", 34, 92);
     cx.restore();
   }
 
@@ -239,7 +235,7 @@
     cx.textAlign = "right";
     if (best > 0){
       cx.globalAlpha = 0.5;
-      cx.fillText("PEAK " + String(best).padStart(5, "0"), W - 130, 44);
+      cx.fillText("HI " + String(best).padStart(5, "0"), W - 130, 44);
       cx.globalAlpha = 1;
     }
     cx.fillText(String(Math.floor(score)).padStart(5, "0"), W - 20, 44);
