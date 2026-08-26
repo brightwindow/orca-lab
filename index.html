@@ -311,17 +311,19 @@ tr.hide{display:none}
     다 끝낸 사람은 아래 심화에서 <a href="#git">git</a>·<a href="#github">GitHub</a>·<a href="#deploy">웹 배포</a>·<a href="#ppt">발표자료</a>까지 이어서 하면 됩니다.
   </p>
 
-  <div class="tip warn" style="margin-top:24px"><p>
-    <b>준비물은 자기 노트북 한 대입니다.</b>
+  <div class="tip warn" style="margin-top:24px">
+    <p><b>준비물은 자기 노트북 한 대입니다.</b>
     프로그램을 깔고 개인 계정으로 로그인하기 때문에, 학교 공용 컴퓨터는 권하지 않습니다.
-    사정상 공용 컴퓨터를 써야 한다면 <a href="#shared">맨 아래 주의사항</a>을 먼저 읽으세요.
-  </p></div>
+    사정상 공용 컴퓨터를 써야 한다면 <a href="#shared">맨 아래 주의사항</a>을 먼저 읽으세요.</p>
+    <p><b>수업 전에 할 것은 <a href="#prep">집에서 미리 해 올 것</a> 에 정리해 뒀습니다.</b>
+    계정 하나 만들고 미리 깔아 오면 15분이 절약됩니다.</p>
+  </div>
 
   <div class="deck">
     <b>수업 때 쓴 발표자료</b>
-    <span class="d">27장 · 설치부터 배포까지</span>
+    <span class="d">28장 · 준비물부터 배포까지</span>
     <span class="sp"></span>
-    <a class="go" href="slides.pdf?v=5" target="_blank" rel="noopener">바로 보기</a>
+    <a class="go" href="slides.pdf?v=6" target="_blank" rel="noopener">바로 보기</a>
   </div>
 </div>
 
@@ -347,6 +349,101 @@ tr.hide{display:none}
 
     <div id="agent-note" hidden></div>
   </div>
+</section>
+
+<!-- 사전 준비 ──────────────────────────────────────────────────────── -->
+<section id="prep">
+  <div class="step-head">
+    <span class="badge">수업 전</span><h2>집에서 미리 해 올 것</h2><span class="mins">15분</span>
+  </div>
+  <p class="sub">
+    수업 시간에 다 해도 되기는 합니다. 다만 <b>서른 명이 같은 와이파이로 190MB 를 동시에 받으면</b>
+    수업이 설치만 하다 끝납니다. 집에서 하면 15분입니다.
+  </p>
+
+  <div class="cards">
+    <div class="card"><h4>① 노트북</h4><p><b>자기 것</b>으로 가져오세요. 충전기도요. 학교 공용 PC 는 권하지 않습니다</p></div>
+    <div class="card"><h4>② 계정 하나</h4><p>고른 에이전트에 맞는 계정. <b>구글 계정이면 대부분 이미 있습니다</b></p></div>
+    <div class="card"><h4>③ 미리 깔아 오기</h4><p>ORCA 와 에이전트. <b>로그인까지 한 번</b> 해 두면 수업이 편합니다</p></div>
+  </div>
+
+  <h3>계정 — 어느 걸 고르느냐에 따라 다릅니다</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>에이전트</th><th>필요한 계정</th><th>돈</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="k">Antigravity<br><span style="font-weight:400; color:var(--go); font-size:13px">권장</span></td>
+          <td><b>구글 계정</b> 하나면 끝입니다. 새로 만들 것도 없습니다</td>
+          <td><b>안 듭니다</b></td>
+        </tr>
+        <tr>
+          <td class="k">Claude</td>
+          <td>Anthropic 계정 + <b>Pro 이상 유료 구독</b></td>
+          <td>유료</td>
+        </tr>
+        <tr>
+          <td class="k">Codex</td>
+          <td>ChatGPT 계정 + <b>Plus 이상 유료 요금제</b></td>
+          <td>유료</td>
+        </tr>
+        <tr>
+          <td class="k">GitHub<br><span style="font-weight:400; color:var(--faint); font-size:13px">심화만</span></td>
+          <td><a href="https://github.com" target="_blank" rel="noopener">github.com</a> 에서 가입.
+              <a href="#github">심화 4~5</a> 까지 할 사람만</td>
+          <td>무료</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tip"><p>
+    <b>돈 내기 싫으면 Antigravity 로 오세요.</b> 구글 계정으로 로그인하는 것이 전부이고
+    추가 비용이 없습니다. 이미 Claude 나 ChatGPT 를 결제해 쓰고 있다면 그걸 그대로 쓰면 됩니다.
+    <b>세 개를 다 만들 필요는 없습니다. 하나만.</b>
+  </p></div>
+
+  <h3>집에서 여기까지만 해 오세요</h3>
+  <ol class="do">
+    <li><b>ORCA 깔기</b>
+      <span class="why"><a href="#s1">실습 1</a> — 터미널에 <code>winget install StablyAI.Orca</code> 한 줄</span></li>
+    <li><b>에이전트 하나 깔기</b>
+      <span class="why"><a href="#s2">실습 2</a> — 위에서 고르면 명령어가 나옵니다</span></li>
+    <li><b>한 번 실행해서 로그인까지</b>
+      <span class="why">브라우저 로그인 창은 <b>처음 한 번만</b> 뜹니다. 그걸 집에서 끝내 두는 게 요령입니다</span></li>
+    <li><b><code>이름 --version</code> 을 쳐서 숫자가 나오면 끝</b>
+      <span class="why">여기까지 되면 수업에서는 <a href="#s3">실습 3</a> 부터 바로 시작합니다</span></li>
+  </ol>
+
+  <div class="tip warn"><p>
+    <b>미리 깔았어도 노트북은 꼭 가져오세요.</b>
+    깐 것은 그 컴퓨터에만 있습니다. 그리고 <b>수업 전에 한 번 켜 보세요</b> —
+    집에서 되던 게 학교 와이파이에서 안 되는 경우가 가끔 있습니다.
+  </p></div>
+
+  <h3>가져올 것 · 확인표</h3>
+  <ul class="checks">
+    <li><label>
+      <input type="checkbox"><span>내 노트북 + 충전기</span>
+    </label></li>
+    <li><label>
+      <input type="checkbox"><span>에이전트를 하나 골랐다 (모르겠으면 <b>Antigravity</b>)</span>
+    </label></li>
+    <li><label>
+      <input type="checkbox"><span>그 계정으로 로그인이 되는지 확인했다</span>
+    </label></li>
+    <li><label>
+      <input type="checkbox"><span>ORCA 를 깔았고, 시작 메뉴에서 <code>orca</code> 로 찾으면 나온다</span>
+    </label></li>
+    <li><label>
+      <input type="checkbox"><span>터미널에서 <code>이름 --version</code> 을 쳤더니 숫자가 나온다</span>
+    </label></li>
+  </ul>
+
+  <div class="tip"><p>
+    <b>못 해 왔어도 그냥 오세요.</b> 수업 시작 10분 전에 오면 같이 깔아 드립니다.
+    안 깔고 와서 못 듣는 시간이 되는 게 아까워서 미리 부탁드리는 것뿐입니다.
+  </p></div>
 </section>
 
 <!-- 1 ─────────────────────────────────────────────────────────────── -->
@@ -1360,7 +1457,7 @@ https://내아이디.github.io/stopwatch/calc.html</pre>
     <span class="badge">심화 6</span><h2>발표자료도 말로 만들기</h2><span class="mins">15분</span>
   </div>
   <p class="sub">
-    <b>이 수업 발표자료 27장도 손으로 안 만들었습니다.</b>
+    <b>이 수업 발표자료 28장도 손으로 안 만들었습니다.</b>
     에이전트한테 시켜서 <code>.pptx</code> 로 뽑은 것입니다.
     방법은 스톱워치와 똑같고, 결과가 HTML 대신 파워포인트 파일일 뿐입니다.
   </p>
@@ -1431,7 +1528,7 @@ https://내아이디.github.io/stopwatch/calc.html</pre>
     이 페이지 맨 위의 “수업 때 쓴 발표자료” 가 바로 그것입니다.
   </p></div>
 
-  <a class="golink" href="slides.pdf?v=5" target="_blank" rel="noopener">그렇게 만든 이 수업 발표자료 보기</a>
+  <a class="golink" href="slides.pdf?v=6" target="_blank" rel="noopener">그렇게 만든 이 수업 발표자료 보기</a>
 
   <ul class="checks"><li><label>
     <input type="checkbox"><span>내가 시켜서 만든 <code>.pptx</code> 를 열어 봤다</span>
