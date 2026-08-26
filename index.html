@@ -307,7 +307,7 @@ tr.hide{display:none}
   <p class="lede">
     말로 시키면 내 컴퓨터에 파일을 만들어 주는 프로그램을 써 봅니다.
     git, 커밋, 브랜치 같은 말은 <b>실습 1~7 에는 안 나옵니다.</b> 폴더 하나로 끝냅니다.
-    <b>모두 15분</b>이면 됩니다.
+    <b>모두 20분</b>이면 됩니다.
     다 끝낸 사람은 아래 심화에서 <a href="#git">git</a>·<a href="#github">GitHub</a>·<a href="#deploy">웹 배포</a>·<a href="#ppt">발표자료</a>까지 이어서 하면 됩니다.
   </p>
 
@@ -319,9 +319,9 @@ tr.hide{display:none}
 
   <div class="deck">
     <b>수업 때 쓴 발표자료</b>
-    <span class="d">26장 · 설치부터 배포까지</span>
+    <span class="d">27장 · 설치부터 배포까지</span>
     <span class="sp"></span>
-    <a class="go" href="slides.pdf?v=4" target="_blank" rel="noopener">바로 보기</a>
+    <a class="go" href="slides.pdf?v=5" target="_blank" rel="noopener">바로 보기</a>
   </div>
 </div>
 
@@ -352,28 +352,126 @@ tr.hide{display:none}
 <!-- 1 ─────────────────────────────────────────────────────────────── -->
 <section id="s1" data-step="1">
   <div class="step-head">
-    <span class="badge">실습 1</span><h2>ORCA 깔기</h2><span class="mins">3분</span>
+    <span class="badge">실습 1</span><h2>ORCA 깔기</h2><span class="mins">5분</span>
   </div>
   <p class="sub">
     ORCA 는 내 폴더를 기억해 두고 그 안에서 터미널을 띄워 주는 프로그램입니다.
     인공지능을 직접 만들지도, 돈을 받지도 않습니다. <b>껍데기</b>라고 보면 됩니다.
   </p>
 
-  <p><a href="https://onorca.dev/download" target="_blank" rel="noopener">onorca.dev/download</a> 에서 내 운영체제 것을 받으세요.</p>
-
-  <div class="cards">
-    <div class="card"><h4>Windows</h4><p><code>setup.exe</code> 받아서 두 번 누르기</p></div>
-    <div class="card"><h4>macOS</h4><p><code>.dmg</code> 받아서 끌어 넣기. 확인 창이 뜨면 열기</p></div>
-    <div class="card"><h4>Linux</h4><p>AppImage 또는 <code>.deb</code></p></div>
-  </div>
-
   <div class="tip"><p>
-    처음 켜면 <b>홈 폴더를 봐도 되느냐</b>고 묻습니다. 허용하세요. 내 폴더를 찾으려고 묻는 것입니다.
+    깔는 방법이 두 가지입니다. <b>명령 한 줄이 훨씬 쉽습니다</b> —
+    웹에서 받으면 윈도우가 “이 앱이 위험할 수 있다”는 파란 창을 띄우는데,
+    명령으로 깔면 그 창이 아예 안 뜹니다. 방법 A 로 하세요.
   </p></div>
 
-  <ul class="checks"><li><label>
-    <input type="checkbox"><span>ORCA 가 깔렸고 실행하면 창이 뜬다</span>
-  </label></li></ul>
+  <h3>먼저, 터미널 여는 법</h3>
+  <p class="sub" style="margin-bottom:12px">
+    아직 ORCA 가 없으니 <b>윈도우가 원래 갖고 있는 터미널</b>을 씁니다. 이번 한 번만 씁니다.
+  </p>
+  <div class="cards">
+    <div class="card"><h4>Windows</h4><p>키보드 <code>⊞ + X</code> → <b>터미널</b><br>또는 시작 메뉴에 <code>powershell</code> 치기</p></div>
+    <div class="card"><h4>macOS</h4><p><code>⌘ + 스페이스</code> → <b>terminal</b> 치고 엔터</p></div>
+    <div class="card"><h4>Linux</h4><p><code>Ctrl + Alt + T</code></p></div>
+  </div>
+
+  <h3>방법 A · 명령 한 줄 <span style="font-family:var(--mono); font-size:12px; color:var(--go)">권장</span></h3>
+
+  <div class="snip big">
+    <div class="snip-top"><span>Windows · 터미널에 치고 엔터</span><button class="copy">복사</button></div>
+<pre>winget install StablyAI.Orca</pre>
+  </div>
+  <div class="snip">
+    <div class="snip-top"><span>macOS · Homebrew 가 있으면</span><button class="copy">복사</button></div>
+<pre>brew install --cask stablyai/orca/orca</pre>
+  </div>
+  <p style="font-size:15px; color:var(--muted); margin-top:-6px">
+    리눅스는 한 줄짜리가 없습니다. 방법 B 로 AppImage 를 받으세요.
+  </p>
+
+  <div class="pair">
+    <div class="box ok"><h4>이러면 잘 가고 있습니다</h4><ul>
+      <li><code>Found Orca [StablyAI.Orca]</code> 같은 줄이 뜹니다</li>
+      <li>퍼센트가 올라갑니다 — <b>190MB 라 2~5분</b> 걸립니다</li>
+      <li>강의실 와이파이에서는 더 걸립니다. <b>멈춘 게 아닙니다</b></li>
+      <li>마지막에 <code>성공적으로 설치</code> 가 뜨면 끝</li>
+    </ul></div>
+    <div class="box no"><h4>막히면</h4><ul>
+      <li><b><code>winget</code> 이 없다고 함</b> — 마이크로소프트 스토어에서
+          <b>앱 설치 관리자</b>를 깔면 생깁니다. Windows 11 이면 원래 있습니다</li>
+      <li><b>사용권 계약에 동의하라고 함</b> —
+          <code>winget install StablyAI.Orca --accept-source-agreements</code></li>
+      <li><b>관리자 권한 창(UAC)이 뜸</b> — <b>예</b>를 누르세요.
+          안 떠도 정상입니다. 이 프로그램은 내 계정 폴더에만 깔립니다</li>
+    </ul></div>
+  </div>
+
+  <h3>방법 B · 웹에서 받기</h3>
+  <p><a href="https://onorca.dev/download" target="_blank" rel="noopener">onorca.dev/download</a> 에서 내 운영체제 것을 받습니다.</p>
+  <div class="cards">
+    <div class="card"><h4>Windows</h4><p><b>Windows 10/11 x64 installer</b> 를 받아 두 번 누르기</p></div>
+    <div class="card"><h4>macOS</h4><p>애플 실리콘은 <b>Apple Silicon DMG</b>, 인텔 맥은 <b>macOS Intel</b></p></div>
+    <div class="card"><h4>Linux</h4><p><b>Universal AppImage</b> 를 받고 <code>chmod +x</code> 준 뒤 실행</p></div>
+  </div>
+
+  <div class="tip warn">
+    <p><b>Windows 에서 파란 창이 뜹니다 — 잘못 받은 게 아닙니다.</b></p>
+    <p style="font-family:var(--mono); font-size:12.5px; line-height:1.6; background:var(--sunk); padding:10px 12px; border-radius:6px">Windows의 PC 보호<br>Microsoft Defender SmartScreen에서<br>인식할 수 없는 앱의 시작을 차단했습니다.</p>
+    <p><b>추가 정보</b>를 누르면 아래에 <b>실행</b> 버튼이 나옵니다. 그걸 누르세요.
+      아직 많이 쓰이지 않은 프로그램이라 뜨는 창입니다.
+      <b>방법 A 로 깔면 이 창이 안 뜹니다.</b></p>
+  </div>
+
+  <div class="tip warn"><p>
+    <b>맥은 “확인되지 않은 개발자” 창이 뜹니다.</b>
+    그냥 두 번 눌러서는 안 열립니다. 응용 프로그램 폴더에서
+    <b>Orca 를 오른쪽 클릭 → 열기</b> 로 여세요. 처음 한 번만 그렇게 하면 됩니다.
+  </p></div>
+
+  <h3>깔았습니다. 그런데 어디 있죠?</h3>
+  <div class="tip warn"><p>
+    <b>바탕화면에 아이콘이 안 생깁니다.</b> 여기서 제일 많이 헤맵니다.
+    <b>시작 메뉴를 열고 <code>orca</code> 라고 치세요.</b> 바로 나옵니다.
+    자주 쓸 거면 오른쪽 클릭 → <b>작업 표시줄에 고정</b> 해 두세요.
+  </p></div>
+
+  <div class="tw">
+    <table>
+      <thead><tr><th>궁금한 것</th><th>답</th></tr></thead>
+      <tbody>
+        <tr><td class="k">어디에 깔렸나</td><td><code>C:\Users\내이름\AppData\Local\Programs\orca</code><br><span style="font-size:13.5px; color:var(--faint)">Program Files 가 아닙니다. <b>내 계정 폴더</b> 안이라 관리자 권한이 필요 없습니다</span></td></tr>
+        <tr><td class="k">업데이트는</td><td>알아서 받아 둡니다. 다음에 켤 때 적용됩니다</td></tr>
+        <tr><td class="k">지우려면</td><td><code>winget uninstall StablyAI.Orca</code><br><span style="font-size:13.5px; color:var(--faint)">또는 설정 → 앱 → 설치된 앱 에서 Orca</span></td></tr>
+        <tr><td class="k">나중에 올리려면</td><td><code>winget upgrade StablyAI.Orca</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>처음 켰을 때</h3>
+  <ol class="do">
+    <li><b>시작 메뉴에서 Orca 실행</b>
+      <span class="why">첫 실행은 10~20초 걸릴 수 있습니다</span></li>
+    <li><b>홈 폴더를 봐도 되느냐고 물으면 허용</b>
+      <span class="why">내 폴더를 목록에 보여 주려고 묻는 것입니다. 거부하면 실습 4 에서 폴더를 못 고릅니다</span></li>
+    <li><b>방화벽이 물어보면 취소해도 됩니다</b>
+      <span class="why">내 컴퓨터 안 통신이라 막혀도 실습에 지장이 없습니다</span></li>
+    <li><b>창이 뜨고 왼쪽 아래에 <code>Projects</code> 가 보이면 끝</b>
+      <span class="why">아직 아무것도 없는 게 정상입니다. 실습 4 에서 채웁니다</span></li>
+  </ol>
+
+  <div class="tip"><p>
+    로그인 화면이 나와도 <b>ORCA 계정을 만들 필요는 없습니다.</b>
+    돈을 내는 곳은 ORCA 가 아니라 다음 단계에서 고를 <b>에이전트</b> 쪽입니다.
+  </p></div>
+
+  <ul class="checks">
+    <li><label>
+      <input type="checkbox"><span>시작 메뉴에서 <code>orca</code> 를 찾으면 나온다</span>
+    </label></li>
+    <li><label>
+      <input type="checkbox"><span>실행했더니 창이 뜨고 왼쪽 아래에 Projects 가 보인다</span>
+    </label></li>
+  </ul>
 </section>
 
 <!-- 2 ─────────────────────────────────────────────────────────────── -->
@@ -392,9 +490,23 @@ tr.hide{display:none}
 <pre>node --version</pre>
   </div>
   <p style="font-size:15px; color:var(--muted); margin-top:-6px">
-    <code>v20</code> 이상이면 됩니다. 아무것도 안 나오면
-    <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a> 에서 LTS 를 받아 까세요.
+    <code>v20</code> 이상이면 됩니다. 아무것도 안 나오면 아래를 그대로 붙여 넣으세요.
   </p>
+
+  <div class="snip">
+    <div class="snip-top"><span>Windows · Node.js 없을 때만</span><button class="copy">복사</button></div>
+<pre>winget install OpenJS.NodeJS.LTS</pre>
+  </div>
+  <div class="snip">
+    <div class="snip-top"><span>macOS · Node.js 없을 때만</span><button class="copy">복사</button></div>
+<pre>brew install node</pre>
+  </div>
+
+  <div class="tip warn"><p>
+    <b>깔고 나면 터미널을 닫았다가 새로 여세요.</b>
+    이미 열려 있던 터미널은 방금 깐 것을 못 찾습니다.
+    새로 열고 <code>node --version</code> 을 다시 쳐서 숫자가 나오는지 보세요.
+  </p></div>
 
   <h3>고른 에이전트 깔기</h3>
   <div class="snip">
@@ -1020,10 +1132,32 @@ description: 한 파일짜리 웹페이지를 만들 때 쓴다. 계산기·타�
 <pre>git --version</pre>
   </div>
   <p style="font-size:15px; color:var(--muted); margin-top:-6px">
-    숫자가 뜨면 이미 있는 것입니다. 없다고 나오면
-    <a href="https://git-scm.com/download/win" target="_blank" rel="noopener">git-scm.com</a>
-    에서 받아 까세요. 설치 창은 <b>전부 다음</b>을 눌러도 됩니다.
+    숫자가 뜨면 이미 있는 것입니다. <b>없다고 나오면 아래를 그대로 붙여 넣으세요.</b>
+    설치 창을 눌러 가며 고를 것이 없습니다.
   </p>
+
+  <div class="snip big">
+    <div class="snip-top"><span>Windows · 터미널에 치고 엔터</span><button class="copy">복사</button></div>
+<pre>winget install Git.Git</pre>
+  </div>
+  <div class="snip">
+    <div class="snip-top"><span>macOS · 보통은 이미 깔려 있습니다</span><button class="copy">복사</button></div>
+<pre>brew install git</pre>
+  </div>
+
+  <div class="pair">
+    <div class="box ok"><h4>이러면 성공</h4><ul>
+      <li>퍼센트가 올라가고 <code>성공적으로 설치</code> 가 뜹니다</li>
+      <li><b>터미널을 닫았다가 새로 열기</b></li>
+      <li>다시 <code>git --version</code> → <code>git version 2.55…</code></li>
+    </ul></div>
+    <div class="box no"><h4>막히면</h4><ul>
+      <li><b>없는 명령이라고 나옴</b> — 터미널을 안 껐다 켠 것입니다</li>
+      <li><b><code>winget</code> 이 없다</b> — 스토어에서 <b>앱 설치 관리자</b> 를 깔거나
+          <a href="https://git-scm.com/download/win" target="_blank" rel="noopener">git-scm.com</a> 에서 직접 받으세요</li>
+      <li><b>관리자 권한 창</b> — <b>예</b>를 누르세요. git 은 모든 계정에 깔립니다</li>
+    </ul></div>
+  </div>
 
   <h3>처음 한 번만 — 이름표 붙이기</h3>
   <div class="snip">
@@ -1226,7 +1360,7 @@ https://내아이디.github.io/stopwatch/calc.html</pre>
     <span class="badge">심화 6</span><h2>발표자료도 말로 만들기</h2><span class="mins">15분</span>
   </div>
   <p class="sub">
-    <b>이 수업 발표자료 26장도 손으로 안 만들었습니다.</b>
+    <b>이 수업 발표자료 27장도 손으로 안 만들었습니다.</b>
     에이전트한테 시켜서 <code>.pptx</code> 로 뽑은 것입니다.
     방법은 스톱워치와 똑같고, 결과가 HTML 대신 파워포인트 파일일 뿐입니다.
   </p>
@@ -1297,7 +1431,7 @@ https://내아이디.github.io/stopwatch/calc.html</pre>
     이 페이지 맨 위의 “수업 때 쓴 발표자료” 가 바로 그것입니다.
   </p></div>
 
-  <a class="golink" href="slides.pdf?v=4" target="_blank" rel="noopener">그렇게 만든 이 수업 발표자료 보기</a>
+  <a class="golink" href="slides.pdf?v=5" target="_blank" rel="noopener">그렇게 만든 이 수업 발표자료 보기</a>
 
   <ul class="checks"><li><label>
     <input type="checkbox"><span>내가 시켜서 만든 <code>.pptx</code> 를 열어 봤다</span>
@@ -1421,6 +1555,13 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
     <table>
       <thead><tr><th>이럴 때</th><th>이렇게 해 보기</th></tr></thead>
       <tbody id="tb">
+        <tr><td class="k">ORCA 를 깔았는데 아이콘이 없음</td><td>바탕화면에는 안 생깁니다. <b>시작 메뉴에서 <code>orca</code></b> 라고 쳐서 찾으세요</td></tr>
+        <tr><td class="k">winget 이 없다고 나옴</td><td>마이크로소프트 스토어에서 <b>앱 설치 관리자</b>를 깔면 생깁니다. 아니면 웹에서 직접 받으세요</td></tr>
+        <tr><td class="k">파란 창 · PC 보호</td><td>SmartScreen 입니다. <b>추가 정보 → 실행</b>. <code>winget</code> 으로 깔면 안 뜹니다</td></tr>
+        <tr><td class="k">맥에서 확인되지 않은 개발자</td><td>응용 프로그램에서 <b>오른쪽 클릭 → 열기</b>. 처음 한 번만</td></tr>
+        <tr><td class="k">git 을 깔았는데 없는 명령이라고 함</td><td><b>터미널을 닫았다가 새로 여세요.</b> 이미 열려 있던 터미널은 방금 깐 것을 못 찾습니다</td></tr>
+        <tr><td class="k">node 를 깔았는데 안 잡힘</td><td>같은 이유입니다. 터미널을 새로 열고 <code>node --version</code> 을 다시 쳐 보세요</td></tr>
+        <tr><td class="k">받는 게 너무 느림</td><td>190MB 짜리입니다. 강의실 와이파이면 5분도 걸립니다. 멈춘 게 아닙니다</td></tr>
         <tr><td class="k">없는 명령이라고 나옴</td><td>아직 안 깔린 것입니다. 실습 2 로 돌아가서 깔고 오세요</td></tr>
         <tr><td class="k">agy 를 깔았는데 없는 명령이라고 함</td><td><b>터미널을 닫았다가 새로 여세요.</b> 설치 프로그램이 PATH 에 넣어 주지만 이미 열려 있던 터미널에는 적용되지 않습니다</td></tr>
         <tr><td class="k">보안 오류 · 스크립트를 실행할 수 없음</td><td>Windows 기본 설정 탓입니다. 이름 뒤에 <code>.cmd</code> 를 붙여 치거나, <code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> 를 한 번 실행하세요</td></tr>
