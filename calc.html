@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>계산기</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1c1c1e;
+    font-family: -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
+  }
+  .calc {
+    width: 320px;
+    padding: 16px;
+    background: #000;
+    border-radius: 20px;
+  }
+  .screen {
+    height: 96px;
+    padding: 0 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    color: #fff;
+    overflow: hidden;
+  }
+  .expr {
+    font-size: 16px;
+    color: #8e8e93;
+    height: 22px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .out {
+    font-size: 52px;
+    font-weight: 300;
+    line-height: 1.1;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .keys {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+  button {
+    height: 68px;
+    border: 0;
+    border-radius: 50%;
+    font-size: 26px;
+    color: #fff;
+    background: #333;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  button:active { filter: brightness(1.5); }
+  .fn { background: #a5a5a5; color: #000; }
+  .op { background: #ff9f0a; }
+  .op.on { background: #fff; color: #ff9f0a; }
+  .zero {
+    grid-column: span 2;
+    border-radius: 34px;
+    text-align: left;
+    padding-left: 26px;
+  }
+</style>
+</head>
+<body>
+
+<div class="calc">
+  <div class="screen">
+    <div class="expr" id="expr"></div>
+    <div class="out" id="out">0</div>
+  </div>
+  <div class="keys" id="keys">
+    <button class="fn" data-clear>AC</button>
+    <button class="fn" data-sign>+/−</button>
+    <button class="fn" data-percent>%</button>
+    <button class="op" data-op="/">÷</button>
+
+    <button data-num="7">7</button>
+    <button data-num="8">8</button>
+    <button data-num="9">9</button>
+    <button class="op" data-op="*">×</button>
+
+    <button data-num="4">4</button>
+    <button data-num="5">5</button>
+    <button data-num="6">6</button>
+    <button class="op" data-op="-">−</button>
+
+    <button data-num="1">1</button>
+    <button data-num="2">2</button>
+    <button data-num="3">3</button>
+    <button class="op" data-op="+">+</button>
+
+    <button class="zero" data-num="0">0</button>
+    <button data-dot>.</button>
+    <button class="op" data-eq>=</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var outEl = document.getElementById('out');
+  var exprEl = document.getElementById('expr');
+
+  var cur = '0';      // 지금 찍고 있는 숫자
+  var acc = null;     // 쌓아 둔 값
+  var op = null;      // 대기 중인 연산자
+  var fresh = true;   // 다음 숫자를 새로 시작해야 하는가
+
+  var SIGNS = { '+': '+', '-': '−', '*': '×', '/': '÷' };
+
+  function fmt(n) {
+    if (!isFinite(n)) return '오류';
+    var s = Number(n.toPrecision(12)).toString();
+    if (s.indexOf('e') !== -1) return s;
+    var p = s.split('.');
+    p[0] = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return p.join('.');
+  }
+
+  function draw() {
+    outEl.textContent = cur === '오류' ? cur : fmt(parseFloat(cur));
+    if (op === null) {
+      exprEl.textContent = '';
+    } else {
+      exprEl.textContent = fmt(acc) + ' ' + SIGNS[op];
+    }
+    var on = document.querySelector('.op.on');
+    if (on) on.classList.remove('on');
+    if (op !== null && fresh) {
+      var b = document.querySelector('[data-op="' + op + '"]');
+      if (b) b.classList.add('on');
+    }
+  }
+
+  function calc(a, b, o) {
+    if (o === '+') return a + b;
+    if (o === '-') return a - b;
+    if (o === '*') return a * b;
+    return b === 0 ? NaN : a / b;
+  }
+
+  function clearAll() {
+    cur = '0'; acc = null; op = null; fresh = true;
+  }
+
+  function inputNum(d) {
+    if (cur === '오류') clearAll();
+    if (fresh) { cur = d; fresh = false; }
+    else if (cur === '0') cur = d;
+    else if (cur.replace(/[-.]/g, '').length < 12) cur += d;
+  }
+
+  function inputDot() {
+    if (cur === '오류') clearAll();
+    if (fresh) { cur = '0.'; fresh = false; }
+    else if (cur.indexOf('.') === -1) cur += '.';
+  }
+
+  function setOp(next) {
+    if (cur === '오류') return;
+    var v = parseFloat(cur);
+    if (op !== null && !fresh) {
+      acc = calc(acc, v, op);
+      if (!isFinite(acc)) { cur = '오류'; acc = null; op = null; fresh = true; return; }
+      cur = String(acc);
+    } else {
+      acc = v;
+    }
+    op = next;
+    fresh = true;
+  }
+
+  function equals() {
+    if (cur === '오류' || op === null) return;
+    var v = calc(acc, parseFloat(cur), op);
+    cur = isFinite(v) ? String(v) : '오류';
+    acc = null; op = null; fresh = true;
+  }
+
+  document.getElementById('keys').addEventListener('click', function (e) {
+    var b = e.target.closest('button');
+    if (!b) return;
+    var d = b.dataset;
+    if (d.num !== undefined) inputNum(d.num);
+    else if (d.dot !== undefined) inputDot();
+    else if (d.op !== undefined) setOp(d.op);
+    else if (d.eq !== undefined) equals();
+    else if (d.clear !== undefined) clearAll();
+    else if (d.sign !== undefined) {
+      if (cur !== '오류' && cur !== '0') {
+        cur = cur.charAt(0) === '-' ? cur.slice(1) : '-' + cur;
+      }
+    } else if (d.percent !== undefined) {
+      if (cur !== '오류') { cur = String(parseFloat(cur) / 100); fresh = false; }
+    }
+    draw();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    var k = e.key;
+    if (k >= '0' && k <= '9') inputNum(k);
+    else if (k === '.') inputDot();
+    else if (k === '+' || k === '-' || k === '*' || k === '/') setOp(k);
+    else if (k === 'Enter' || k === '=') { e.preventDefault(); equals(); }
+    else if (k === 'Escape') clearAll();
+    else if (k === 'Backspace') {
+      if (cur === '오류') clearAll();
+      else if (!fresh) {
+        cur = cur.length > 1 ? cur.slice(0, -1) : '0';
+        if (cur === '-') cur = '0';
+      }
+    } else if (k === '%') {
+      if (cur !== '오류') { cur = String(parseFloat(cur) / 100); fresh = false; }
+    } else return;
+    draw();
+  });
+
+  draw();
+})();
+</script>
+
+</body>
+</html>
