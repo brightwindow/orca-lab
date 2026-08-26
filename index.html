@@ -323,7 +323,7 @@ tr.hide{display:none}
     <b>수업 때 쓴 발표자료</b>
     <span class="d">28장 · 준비물부터 배포까지</span>
     <span class="sp"></span>
-    <a class="go" href="slides.pdf?v=6" target="_blank" rel="noopener">바로 보기</a>
+    <a class="go" href="slides.pdf?v=7" target="_blank" rel="noopener">바로 보기</a>
   </div>
 </div>
 
@@ -653,26 +653,50 @@ tr.hide{display:none}
 <!-- 4 ─────────────────────────────────────────────────────────────── -->
 <section id="s4" data-step="4">
   <div class="step-head">
-    <span class="badge">실습 4</span><h2>ORCA 에 프로젝트로 붙이기</h2><span class="mins">1분</span>
+    <span class="badge">실습 4</span><h2>ORCA 에 프로젝트로 붙이기</h2><span class="mins">2분</span>
   </div>
+  <p class="sub">
+    <b>누를 버튼을 정확히 고르는 게 전부입니다.</b>
+    비슷하게 생긴 버튼이 둘 있는데, 하나만 맞습니다.
+  </p>
 
   <div class="screen">
     <div class="screen-bar">화면 배치도 — 처음 켠 상태</div>
     <div class="screen-body">
       <div class="screen-side">
-        <div class="screen-label">Projects <span class="plus">+</span></div>
-        <div class="screen-item empty">아직 아무것도 없음</div>
+        <div class="screen-label">Projects
+          <span class="plus">［폴더］</span>
+          <span style="color:var(--faint)">［+］</span>
+        </div>
+        <div class="screen-item empty">워크스페이스를 찾을 수 없습니다</div>
       </div>
-      <div class="screen-main">터미널</div>
+      <div class="screen-main">
+        시작하려면 프로젝트를 추가하세요.<br><br>
+        <span style="color:var(--go); font-weight:700">［ 프로젝트 추가 ］</span>
+        &nbsp;&nbsp;<span style="color:var(--faint)">［ 생성 workspace ］</span>
+      </div>
     </div>
   </div>
-  <div class="callout"><b>1</b><span>왼쪽 아래 <b>Projects</b> — 여기에 폴더 목록이 쌓입니다. 그 오른쪽 끝의 <b>+</b> 를 누릅니다</span></div>
+
+  <div class="tip warn">
+    <p><b>초록으로 표시한 두 곳만 누르세요.</b> 둘 다 같은 일을 합니다 — 아무거나 하나.</p>
+    <ul>
+      <li>가운데 큰 <b>프로젝트 추가</b> 버튼 <span style="color:var(--faint)">— 처음 켰을 때만 보입니다. 제일 쉽습니다</span></li>
+      <li>왼쪽 <b>Projects</b> 오른쪽의 <b>폴더 모양 아이콘</b> <span style="color:var(--faint)">— 언제나 있습니다</span></li>
+    </ul>
+    <p><b>맨 오른쪽 <code>+</code> 와 <code>생성 workspace</code> 는 누르지 마세요.</b>
+      그건 <b>워크스페이스(작업 갈래) 만들기</b>라서 오늘 실습과 다른 창이 뜹니다.
+      잘못 눌렀으면 <code>Esc</code> 로 닫고 다시 하면 됩니다.</p>
+  </div>
 
   <ol class="do">
-    <li><b>Projects 옆 <code>+</code> 누르기</b><span class="why">프로젝트 추가 창이 뜹니다</span></li>
-    <li><b>호스트가 <code>Local Windows</code> 인지 보기</b><span class="why">내 컴퓨터라는 뜻입니다. 그대로 두세요</span></li>
+    <li><b>프로젝트 추가 누르기</b>
+      <span class="why">가운데 큰 버튼 또는 Projects 옆 <b>폴더 아이콘</b>. <code>+</code> 아닙니다</span></li>
+    <li><b>호스트가 <code>Local Windows</code> 인지 보기</b>
+      <span class="why">내 컴퓨터라는 뜻입니다. 그대로 두세요</span></li>
     <li><b>맨 위의 큰 칸, 폴더 찾아보기 누르기</b></li>
-    <li><b>바탕화면의 <code>stopwatch</code> 고르기</b><span class="why">아래 “URL에서 복제”와 “새 프로젝트 만들기”는 오늘 안 씁니다</span></li>
+    <li><b>바탕화면의 <code>stopwatch</code> 고르기</b>
+      <span class="why">아래 “URL에서 복제”와 “새 프로젝트 만들기”는 오늘 안 씁니다</span></li>
   </ol>
 
   <div class="screen">
@@ -685,24 +709,31 @@ tr.hide{display:none}
       <div class="screen-main">PS C:\Users\...\Desktop\stopwatch&gt;</div>
     </div>
   </div>
-  <div class="callout"><b>2</b><span><b>터미널 경로 끝이 <code>stopwatch</code> 인지</b> 보세요. 이게 제일 중요합니다</span></div>
+  <div class="callout"><b>확인</b><span><b>터미널이 저절로 열립니다.</b> 따로 만들 것 없습니다. <b>경로 끝이 <code>stopwatch</code> 인지</b>만 보세요 — 이게 제일 중요합니다</span></div>
 
   <div class="pair">
     <div class="box ok"><h4>이러면 성공</h4><ul>
       <li>왼쪽 목록에 <code>stopwatch</code> 가 보인다</li>
-      <li>오른쪽에 터미널이 열렸다</li>
+      <li>오른쪽에 터미널이 <b>저절로</b> 열렸다</li>
       <li>그 터미널 위치가 <code>stopwatch</code> 폴더다</li>
     </ul></div>
     <div class="box no"><h4>막히면</h4><ul>
+      <li><b>터미널이 아니라 창이 떴다</b> — <code>+</code> 나 <code>생성 workspace</code> 를 누른 것입니다.
+          <code>Esc</code> 로 닫고 <b>폴더 아이콘</b>으로 다시</li>
       <li>git 폴더가 아니어도 그냥 받아 줍니다. 거절 안 합니다</li>
       <li>폴더가 안 보이면 숨김 폴더인지 보세요</li>
     </ul></div>
   </div>
 
+  <div class="tip"><p>
+    <b>“온보딩 완료! GitHub 별표를 눌러 달라”</b>는 알림이 오른쪽 아래에 뜰 수 있습니다.
+    <b>Later</b> 를 누르면 됩니다. 실습과 상관없습니다.
+  </p></div>
+
   <div class="tip"><p>여기까지 되면 <b>절반은 끝났습니다.</b> 아직인 사람은 손 드세요.</p></div>
 
   <ul class="checks"><li><label>
-    <input type="checkbox"><span>터미널 경로 끝이 <code>stopwatch</code> 다</span>
+    <input type="checkbox"><span>터미널이 저절로 열렸고 경로 끝이 <code>stopwatch</code> 다</span>
   </label></li></ul>
 </section>
 
@@ -1528,7 +1559,7 @@ https://내아이디.github.io/stopwatch/calc.html</pre>
     이 페이지 맨 위의 “수업 때 쓴 발표자료” 가 바로 그것입니다.
   </p></div>
 
-  <a class="golink" href="slides.pdf?v=6" target="_blank" rel="noopener">그렇게 만든 이 수업 발표자료 보기</a>
+  <a class="golink" href="slides.pdf?v=7" target="_blank" rel="noopener">그렇게 만든 이 수업 발표자료 보기</a>
 
   <ul class="checks"><li><label>
     <input type="checkbox"><span>내가 시켜서 만든 <code>.pptx</code> 를 열어 봤다</span>
@@ -1664,6 +1695,8 @@ Clear-Content (Get-PSReadLineOption).HistorySavePath -ErrorAction SilentlyContin
         <tr><td class="k">보안 오류 · 스크립트를 실행할 수 없음</td><td>Windows 기본 설정 탓입니다. 이름 뒤에 <code>.cmd</code> 를 붙여 치거나, <code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code> 를 한 번 실행하세요</td></tr>
         <tr><td class="k">로그인하라고 함</td><td>한 번만 따라가면 다음부터는 안 묻습니다</td></tr>
         <tr><td class="k">방화벽이 Node.js 를 물어봄<br><span style="font-weight:400; color:var(--faint); font-size:13px">개인/공용 네트워크</span></td><td>로그인 창을 받으려고 잠깐 여는 것입니다. <b>취소해도 됩니다</b> — 방화벽은 내 컴퓨터 안 통신(127.0.0.1)은 막지 않습니다</td></tr>
+        <tr><td class="k">프로젝트를 붙였는데<br>터미널이 아니라 창이 뜸</td><td><code>+</code> 나 <code>생성 workspace</code> 를 누른 것입니다. <code>Esc</code> 로 닫고 <b>Projects 옆 폴더 모양 아이콘</b>(또는 가운데 <b>프로젝트 추가</b>)으로 다시 하세요</td></tr>
+        <tr><td class="k">온보딩 완료 · GitHub 별표 알림</td><td>실습과 상관없습니다. <b>Later</b> 를 누르세요</td></tr>
         <tr><td class="k">터미널 경로가 딴 데임</td><td>왼쪽 목록에서 <code>stopwatch</code> 를 다시 누르세요</td></tr>
         <tr><td class="k">주소가 안 열림</td><td>터미널에 서버가 켜져 있는지 보고, 포트 번호를 다시 확인하세요</td></tr>
         <tr><td class="k">에러 글자가 잔뜩 나옴</td><td>그대로 복사해서 <b>“이 에러 고쳐 줘”</b> 라고 붙여 넣으세요</td></tr>
